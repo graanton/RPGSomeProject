@@ -6,9 +6,16 @@ using UnityEngine.WSA;
 
 public class Room : MonoBehaviour
 {
-    [SerializeField] private Transform _tilesRoot;
+    [SerializeField] private Tilemap3D _tilemap;
 
-    public RectInt bounds { get; private set; }
+    private RectInt _bounds = new RectInt();
+
+    public RectInt bounds => _bounds;
+
+    private void Awake()
+    {
+        BoundsSizeInit();
+    }
 
     public static bool Intersect(RectInt a, RectInt b)
     {
@@ -16,43 +23,14 @@ public class Room : MonoBehaviour
             || (a.position.y >= (b.position.y + b.size.y)) || ((a.position.y + a.size.y) <= b.position.y));
     }
 
-    public void BoundsInit()
+    private void BoundsSizeInit()
     {
-        Transform mostTop, mostRight, mostBottom, mostLeft;
-
-        mostTop = _tilesRoot;
-        mostRight = _tilesRoot;
-        mostBottom = _tilesRoot;
-        mostLeft = _tilesRoot;
-
-        foreach (Transform tile in _tilesRoot.transform)
-        {
-            if (tile.position.z > mostTop.position.z)
-            {
-                mostTop = tile;
-            }
-            if (tile.position.z < mostBottom.position.z)
-            {
-                mostBottom = tile;
-            }
-            if (tile.position.x > mostRight.position.x)
-            {
-                mostRight = tile;
-            }
-            if (tile.position.x < mostLeft.position.x)
-            {
-                mostLeft = tile;
-            }
-        }
-        Vector2Int localPosition = new (Mathf.RoundToInt(mostLeft.localPosition.x), Mathf.RoundToInt(mostBottom.localPosition.x));
-        Vector2Int size = new (Mathf.RoundToInt(mostRight.localPosition.x + localPosition.x), Mathf.RoundToInt(mostTop.localPosition.z + localPosition.y));
-
-        bounds = new RectInt(Vector2Int.zero, size);
+        _bounds = new RectInt(_bounds.position, _tilemap.size);
     }
 
-    public void MoveBounds(Vector2Int newPosition)
+    public void MoveBoundsPosition(Vector2Int newPosition)
     {
-        bounds = new RectInt(newPosition, bounds.size);
+        _bounds = new RectInt(newPosition, bounds.size);
     }
 }
         

@@ -1,4 +1,5 @@
 ﻿using Graphs;
+using Mono.Cecil;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
@@ -49,11 +50,11 @@ public class Generator2D : MonoBehaviour
         for (int i = 0; i < _roomCount; i++)
         {
             Room currentRoom = _roomsPool.GetRandomWeightedObject().obj;
-            currentRoom.BoundsInit();
-
+            
             Vector2Int location = new Vector2Int(_random.Next(1, _size.x), _random.Next(1 ,_size.y));
-            currentRoom.MoveBounds(location);
             Vector2Int roomSize = currentRoom.bounds.size;
+
+            RectInt currentRoomBounds = new RectInt(location, roomSize);
 
             bool add = true;
             RectInt newRoom = new RectInt(location, roomSize);
@@ -76,8 +77,8 @@ public class Generator2D : MonoBehaviour
 
             if (add)
             {
-                _rooms.Add(currentRoom);
-                PlaceRoom(currentRoom, location);
+                var placedRoom = PlaceRoom(currentRoom, location);
+                _rooms.Add(placedRoom);
 
                 foreach (var pos in newRoom.allPositionsWithin)
                 {
@@ -184,15 +185,17 @@ public class Generator2D : MonoBehaviour
                 {
                     if (_grid[pos] == CellType.Hallway)
                     {
-                        PlaceRoom(_hallwayPrefab, pos);
+                        var placedHallway = PlaceRoom(_hallwayPrefab, pos);
                     }
                 }
             }
         }
     }
 
-    private void PlaceRoom(Room room, Vector2Int position)
+    private Room PlaceRoom(Room room, Vector2Int position)
     {
-        Instantiate(room, _root.position + Vector3.Scale((Vector3Int)room.bounds.position + new Vector3(position.x, 0, position.y), _root.right + _root.forward), _root.rotation);
+        var spawnedRoom = Instantiate(room, _root.position + Vector3.Scale(new Vector3(position.x, 0, position.y), _root.right + _root.forward), _root.rotation, _root);
+        spawnedRoom.MoveBoundsPosition(position);
+        return spawnedRoom;
     }
 }

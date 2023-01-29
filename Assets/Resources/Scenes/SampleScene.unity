@@ -339,17 +339,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _size: {x: 100, y: 100}
-  _roomCount: 5
-  _seed: 213123333
+  _roomCount: 7
+  _seed: 2127966
   _roomConnectionChance: 1
   _roomsPool:
     weigthObjects:
-    - obj: {fileID: -8620014565577880531, guid: 057b6570551824b4c9cb46e554ec5c19,
-        type: 3}
-      weight: 1
+    - {obj: {fileID: -8620014565577880531, guid: 057b6570551824b4c9cb46e554ec5c19,
+        type: 3}, weight: 1}
   _hallwayPrefab: {fileID: 6972130431413212501, guid: 80d32eb0a332e354cab4ff1f6ff171bb,
     type: 3}
   _root: {fileID: 1599843697}
+  _rooms: []
 --- !u!4 &1599843697
 Transform:
   m_ObjectHideFlags: 0

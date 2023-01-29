@@ -1,9 +1,12 @@
 ﻿using Graphs;
 using Mono.Cecil;
 using System.Collections.Generic;
+using TMPro;
 using TreeEditor;
 using UnityEngine;
 using Random = System.Random;
+
+//Origin https://github.com/vazgriz/DungeonGenerator/blob/master/Assets/Scripts2D/Generator2D.cs
 
 public class Generator2D : MonoBehaviour
 {
@@ -50,11 +53,9 @@ public class Generator2D : MonoBehaviour
         for (int i = 0; i < _roomCount; i++)
         {
             Room currentRoom = _roomsPool.GetRandomWeightedObject().obj;
-            
-            Vector2Int location = new Vector2Int(_random.Next(1, _size.x), _random.Next(1 ,_size.y));
-            Vector2Int roomSize = currentRoom.bounds.size;
 
-            RectInt currentRoomBounds = new RectInt(location, roomSize);
+            Vector2Int location = new Vector2Int(_random.Next(0, _size.x), _random.Next(0, _size.y));
+            Vector2Int roomSize = currentRoom.bounds.size;
 
             bool add = true;
             RectInt newRoom = new RectInt(location, roomSize);
@@ -142,7 +143,7 @@ public class Generator2D : MonoBehaviour
             {
                 var pathCost = new DungeonPathfinder2D.PathCost();
 
-                pathCost.cost = Vector2Int.Distance(b.Position, endPos);    //heuristic
+                pathCost.cost = Vector2Int.Distance(b.Position, endPos);
 
                 if (_grid[b.Position] == CellType.Room)
                 {
@@ -194,8 +195,10 @@ public class Generator2D : MonoBehaviour
 
     private Room PlaceRoom(Room room, Vector2Int position)
     {
-        var spawnedRoom = Instantiate(room, _root.position + Vector3.Scale(new Vector3(position.x, 0, position.y), _root.right + _root.forward), _root.rotation, _root);
+        Vector3 placePosition = _root.position + _root.right * position.x + _root.forward * position.y;
+        Room spawnedRoom = Instantiate(room, placePosition, _root.rotation, _root);
         spawnedRoom.MoveBoundsPosition(position);
+
         return spawnedRoom;
     }
 }

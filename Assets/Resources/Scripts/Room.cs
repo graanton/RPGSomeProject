@@ -12,7 +12,7 @@ public class Room : MonoBehaviour
 
     public RectInt bounds => _bounds;
 
-    private void Awake()
+    private void OnValidate()
     {
         BoundsSizeInit();
     }

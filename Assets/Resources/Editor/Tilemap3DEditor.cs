@@ -1,11 +1,18 @@
+using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Security.Cryptography;
+using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Tilemap3DEditor : EditorWindow
 {
     [SerializeField] private GameObject _gridTilePrefab;
+    [SerializeField] private Rect _tileIconSize = new (Vector2.zero, Vector2.one * 100);
+    private const string Title = "Tilemap 3D";
 
     private int _selectedToolbarIndex = -1;
     private int _selectedTilemap3dIndex = -1;
@@ -13,23 +20,34 @@ public class Tilemap3DEditor : EditorWindow
     private string[] _tools = new string[2] { "Brush", "None" };
     private List<GameObject> _grid = new();
     private Transform _gridRoot;
-
+    private GameObject _currentTileForBrush;
     private Vector3 _gridOffset => new Vector3(0.5f, 0, 0.5f);
 
-    [MenuItem("Window/Tilemap3D")]
+    private UnityEvent _tilemap3dChangeEvent = new ();
+
+    [MenuItem("Window/Tilemap 3D")]
     private static void ShowWindow()
     {
-        GetWindow<Tilemap3DEditor>().Show();
+        var window = GetWindow<Tilemap3DEditor>();
+        window.titleContent.text = Title;
+        window.Show();
     }
 
     private void OnEnable()
     {
         SceneView.duringSceneGui += OnSceneGUI;
+        _tilemap3dChangeEvent.AddListener(OnTilemap3dChanged);
+    }
+
+    private void OnTilemap3dChanged()
+    {
+        _grid.Clear();
     }
 
     private void OnDisable()
     {
         SceneView.duringSceneGui -= OnSceneGUI;
+        _tilemap3dChangeEvent.RemoveListener(OnTilemap3dChanged);
     }
 
     private void OnSceneGUI(SceneView sceneView)
@@ -38,25 +56,18 @@ public class Tilemap3DEditor : EditorWindow
         {
             case 0:
                 Tools.current = Tool.None;
-                if (_selectedTilemap3d)
+                if (Event.current.type == EventType.MouseDown && _selectedTilemap3d)
                 {
-                    Camera camera = ((SceneView)SceneView.sceneViews[0]).camera;
-                    Ray ray = camera.ScreenPointToRay(Event.current.mousePosition);
+                    Camera camera = sceneView.camera;
+                    Vector2 mousPosition = new Vector2(Event.current.mousePosition.x, sceneView.position.size.y - Event.current.mousePosition.y);
+                    Ray ray = camera.ScreenPointToRay(mousPosition);
 
-                    if (Physics.Raycast(ray, out RaycastHit hit))
+                    if (_selectedTilemap3d.gameObject.scene.GetPhysicsScene().Raycast(ray.origin, ray.direction, out RaycastHit hit))
                     {
-                        for (int x = 0; x < _selectedTilemap3d.size.x; x++)
-                        {
-                            for (int y = 0; y < _selectedTilemap3d.size.y; y++)
-                            {
-                                var currentGridTile = _grid[_selectedTilemap3d.size.y * x + y];
-                                if (currentGridTile == hit.collider.gameObject)
-                                {
-                                    _selectedTilemap3d.SetTile(currentGridTile, new Vector2Int(x, y));
-                                    break;
-                                }
-                            }
-                        }
+                        GameObject gridTile = hit.collider.gameObject;
+                        Vector2Int tilePosition = GetGridSlotPosition(gridTile);
+
+                        _selectedTilemap3d.SetTile(_currentTileForBrush, tilePosition);
                     }
                 }
                 break;
@@ -76,13 +87,15 @@ public class Tilemap3DEditor : EditorWindow
         }
         var tileMaps3dNames = new string[tileMaps3d.Count + 1];
         tileMaps3dNames[0] = "None";
-
-        for (int i = 1; i < tileMaps3d.Count + 1; i++) 
+        for (int i = 1; i < tileMaps3d.Count + 1; i++)
         {
             tileMaps3dNames[i] = tileMaps3d[i - 1].name;
         }
 
-        if (tileMaps3d.Count > 0 && _selectedTilemap3dIndex < tileMaps3d.Count + 1)
+        bool canChangeTilemap3d = tileMaps3d.Count > 0 && _selectedTilemap3dIndex < tileMaps3d.Count + 1;
+        bool tilemap3dIsSelected = canChangeTilemap3d && _selectedTilemap3dIndex >= 1 && tileMaps3d[_selectedTilemap3dIndex - 1];
+
+        if (canChangeTilemap3d)
         {
             GUILayout.BeginHorizontal();
 
@@ -96,55 +109,39 @@ public class Tilemap3DEditor : EditorWindow
             _selectedTilemap3dIndex = -1;
         }
         
-        if (_selectedTilemap3dIndex >= 1 && tileMaps3d[_selectedTilemap3dIndex - 1])
+        if (tilemap3dIsSelected)
         {
+            if (tileMaps3d[_selectedTilemap3dIndex - 1] != _selectedTilemap3d)
+            {
+                _tilemap3dChangeEvent?.Invoke();
+            }
             _selectedTilemap3d = tileMaps3d[_selectedTilemap3dIndex - 1];
+
             GUILayout.BeginHorizontal();
-            
             EditorGUILayout.LabelField("Grid tile prefab");
             _gridTilePrefab = (GameObject)EditorGUILayout.ObjectField(_gridTilePrefab, typeof(GameObject));
-
             GUILayout.EndHorizontal();
             
             GUILayout.BeginHorizontal();
-            
             EditorGUILayout.LabelField("Grid root");
             _gridRoot = (Transform)EditorGUILayout.ObjectField(_gridRoot, typeof(Transform));
-
             GUILayout.EndHorizontal();
+
+            GridButton();
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Current Tile");
+            _currentTileForBrush = (GameObject)EditorGUILayout.ObjectField(_currentTileForBrush, typeof(GameObject));
+            GUILayout.EndHorizontal();
+
             
-            if (_grid.Count == 0)
-            {
-                if (GUILayout.Button("Create grid"))
-                {
-                    for (int x = 0; x < _selectedTilemap3d.size.x; x++)
-                    {
-                        for (int y = 0; y < _selectedTilemap3d.size.y; y++)
-                        {
-                            _grid.Add(Instantiate(_gridTilePrefab, _gridRoot.position + _gridRoot.right * (_gridOffset.x + x) + _gridRoot.forward * (_gridOffset.z + y),
-                                _gridRoot.rotation, _gridRoot));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (GUILayout.Button("Destroy grid"))
-                {
-                    foreach (GameObject gridTile in _grid)
-                    {
-                        DestroyImmediate(gridTile);
-                    }
-                    _grid.Clear();
-                }
-            }
         }
         else
         {
             _selectedTilemap3d = null;
         }
 
-        if (_selectedTilemap3d != null)
+        if (tilemap3dIsSelected)
         {
             _selectedToolbarIndex = GUILayout.Toolbar(_selectedToolbarIndex, _tools);
         }
@@ -154,8 +151,53 @@ public class Tilemap3DEditor : EditorWindow
         }
     }
 
+    private void GridButton()
+    {
+        if (_grid.Count == 0)
+        {
+            if (GUILayout.Button("Create grid"))
+            {
+                for (int x = 0; x < _selectedTilemap3d.size.x; x++)
+                {
+                    for (int y = 0; y < _selectedTilemap3d.size.y; y++)
+                    {
+                        Vector3 gridTilePostion = _gridRoot.position + _gridRoot.right * (_gridOffset.x + x)
+                            + _gridRoot.forward * (_gridOffset.z + y);
+
+                        _grid.Add(Instantiate(_gridTilePrefab, gridTilePostion,
+                            _gridRoot.rotation, _gridRoot));
+
+                        _grid[x * _selectedTilemap3d.size.y + y].name += $" ({x}, {y})";
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (GUILayout.Button("Destroy grid"))
+            {
+                foreach (GameObject gridTile in _grid)
+                {
+                    DestroyImmediate(gridTile);
+                }
+                _grid.Clear();
+            }
+        }
+    }
+
     private Vector2Int GetGridSlotPosition(GameObject gridSlot)
     {
-        return Vector2Int.zero;
+        for (int x = 0; x < _selectedTilemap3d.size.x; x++)
+        {
+            for (int y = 0; y < _selectedTilemap3d.size.y; y++)
+            {
+                var currentGridTile = _grid[x * _selectedTilemap3d.size.y + y];
+                if (currentGridTile == gridSlot)
+                {
+                    return new Vector2Int(x, y);
+                }
+            }
+        }
+        throw new Exception("Not find grid tile");
     }
 }

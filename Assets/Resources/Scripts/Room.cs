@@ -6,8 +6,6 @@ using UnityEngine.WSA;
 
 public class Room : MonoBehaviour
 {
-    [SerializeField] private Tilemap3D _tilemap;
-
     private RectInt _bounds = new RectInt();
 
     public RectInt bounds => _bounds;
@@ -23,9 +21,9 @@ public class Room : MonoBehaviour
             || (a.position.y >= (b.position.y + b.size.y)) || ((a.position.y + a.size.y) <= b.position.y));
     }
 
-    private void BoundsSizeInit()
+    public void BoundsSizeInit()
     {
-        _bounds = new RectInt(_bounds.position, _tilemap.size);
+        throw new System.Exception("FIIIIIX IT");
     }
 
     public void MoveBoundsPosition(Vector2Int newPosition)

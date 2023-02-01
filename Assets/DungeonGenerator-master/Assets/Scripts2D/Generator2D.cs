@@ -22,7 +22,7 @@ public class Generator2D : MonoBehaviour
     [SerializeField] private int _seed;
     [SerializeField, Range(0, 1)] private float _roomConnectionChance = 0.125f;
     [SerializeField] Pool<Room> _roomsPool;
-    [SerializeField] private Room _hallwayPrefab;
+    [SerializeField] private Hallway _hallwayPrefab;
     [SerializeField] private Transform _root;
 
     private Random _random;
@@ -186,7 +186,7 @@ public class Generator2D : MonoBehaviour
                 {
                     if (_grid[pos] == CellType.Hallway)
                     {
-                        var placedHallway = PlaceRoom(_hallwayPrefab, pos);
+                        var placedHallway = PlaceHalway(_hallwayPrefab, pos);
                     }
                 }
             }
@@ -198,7 +198,13 @@ public class Generator2D : MonoBehaviour
         Vector3 placePosition = _root.position + _root.right * position.x + _root.forward * position.y;
         Room spawnedRoom = Instantiate(room, placePosition, _root.rotation, _root);
         spawnedRoom.MoveBoundsPosition(position);
+        spawnedRoom.BoundsSizeInit();
 
         return spawnedRoom;
+    }
+
+    private Hallway PlaceHalway(Hallway hallway, Vector2Int position)
+    {
+        return (Hallway)PlaceRoom(hallway, position);
     }
 }

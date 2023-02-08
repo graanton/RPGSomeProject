@@ -5,7 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace
+namespace CustomTilemap3d
 {
     public class Tilemap3DEditorWindow : EditorWindow
     {

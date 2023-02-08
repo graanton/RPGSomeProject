@@ -1,9 +1,7 @@
 ﻿using Graphs;
-using Mono.Cecil;
 using System.Collections.Generic;
-using TMPro;
-using TreeEditor;
 using UnityEngine;
+using static UnityEditor.FilePathAttribute;
 using Random = System.Random;
 
 //Origin https://github.com/vazgriz/DungeonGenerator/blob/master/Assets/Scripts2D/Generator2D.cs
@@ -24,6 +22,10 @@ public class Generator2D : MonoBehaviour
     [SerializeField] Pool<Room> _roomsPool;
     [SerializeField] private Hallway _hallwayPrefab;
     [SerializeField] private Transform _root;
+    [SerializeField] private List<Room> _precreatedRoom;
+
+    [Space]
+    [SerializeField] private bool _seedIsRandom, _runInStart;
 
     private Random _random;
     private Grid2D<CellType> _grid;
@@ -31,17 +33,32 @@ public class Generator2D : MonoBehaviour
     private Delaunay2D _delaunay;
     private HashSet<Prim.Edge> _selectedEdges;
 
+    private const int _saveMemoryRandomTriesCount = 10;
+
     private void Start()
     {
-        Generate();
+        if (_runInStart)
+        {
+            Generate();
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (_seedIsRandom)
+        {
+            _random = new Random(UnityEngine.Random.Range(int.MinValue, int.MaxValue));
+        }
+        else
+        {
+            _random = new Random(_seed);
+        }
+        _grid = new Grid2D<CellType>(_size, Vector2Int.zero);
+        _rooms = new List<Room>();
     }
 
     private void Generate()
     {
-        _random = new Random(_seed);
-        _grid = new Grid2D<CellType>(_size, Vector2Int.zero);
-        _rooms = new List<Room>();
-
         PlaceRooms();
         Triangulate();
         CreateHallways();
@@ -50,9 +67,21 @@ public class Generator2D : MonoBehaviour
 
     private void PlaceRooms()
     {
-        for (int i = 0; i < _roomCount; i++)
+        for (int i = 0; i < _roomCount + _precreatedRoom.Count; i++)
         {
-            Room currentRoom = _roomsPool.GetRandomWeightedObject().obj;
+            Room currentRoom;
+
+            bool currentRoomIsPrecreated = i < _precreatedRoom.Count;
+
+            if (currentRoomIsPrecreated)
+            {
+                currentRoom = _precreatedRoom[i];
+            }
+            else
+            {
+                currentRoom = _roomsPool.GetRandomWeightedObject().obj;
+            }
+            
 
             Vector2Int location = new Vector2Int(_random.Next(0, _size.x), _random.Next(0, _size.y));
             Vector2Int roomSize = currentRoom.bounds.size;
@@ -78,16 +107,19 @@ public class Generator2D : MonoBehaviour
 
             if (add)
             {
-                var placedRoom = PlaceRoom(currentRoom, location);
-                _rooms.Add(placedRoom);
-
-                foreach (var pos in newRoom.allPositionsWithin)
+                if (currentRoomIsPrecreated)
                 {
-                    _grid[pos] = CellType.Room;
+                    AddRoom(currentRoom);
+                }
+                else
+                {
+                    PlaceRoom(currentRoom, location);
                 }
             }
         }
     }
+
+    
 
     private void Triangulate()
     {
@@ -198,13 +230,76 @@ public class Generator2D : MonoBehaviour
         Vector3 placePosition = _root.position + _root.right * position.x + _root.forward * position.y;
         Room spawnedRoom = Instantiate(room, placePosition, _root.rotation, _root);
         spawnedRoom.MoveBoundsPosition(position);
-        spawnedRoom.BoundsSizeInit();
+
+        AddRoom(spawnedRoom);
 
         return spawnedRoom;
+    }
+
+    public void AddRoom(Room room)
+    {
+        _rooms.Add(room);
+
+        foreach (var pos in room.bounds.allPositionsWithin)
+        {
+            _grid[pos] = CellType.Room;
+        }
     }
 
     private Hallway PlaceHalway(Hallway hallway, Vector2Int position)
     {
         return (Hallway)PlaceRoom(hallway, position);
+    }
+
+    public Room GarantedRandomPlaceRoom(Room room, Vector2Int step)
+    {
+        List<Vector2Int> placePositions = new();
+
+        for (int tries = 0; tries < _saveMemoryRandomTriesCount; tries++)
+        {
+            Vector2Int randomPoint = new Vector2Int(_random.Next(0, _grid.Size.x - 1), _random.Next(0, _grid.Size.y - 1));
+            Vector2Int roomSize = room.bounds.size;
+            if (CanRoomPlace(new RectInt(randomPoint, roomSize)))
+            {
+                placePositions.Add(randomPoint);
+            }
+        }
+
+        bool unlucky = placePositions.Count == 0;
+        if (unlucky)
+        {
+            for (int x = 0; x < _grid.Size.x; x += step.x)
+            {
+                for (int y = 0; x < _grid.Size.y; y += step.y)
+                {
+                    if (!CanRoomPlace(new RectInt(x, y, room.bounds.width, room.bounds.height))) { continue; }
+                    placePositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        Vector2Int placePosition = placePositions[_random.Next(placePositions.Count - 1)];
+        placePositions.Clear();
+        Room placedRoom = PlaceRoom(room, placePosition);
+        AddRoom(placedRoom);
+
+        return placedRoom;
+    }
+
+    private bool CanRoomPlace(RectInt roomData)
+    {
+        bool anyIntersected = false;
+        foreach (Room currentRoom in _rooms)
+        {
+            if (Room.Intersect(currentRoom.bounds, roomData))
+            {
+                anyIntersected = true;
+                break;
+            }
+        }
+        bool canPlace = !(roomData.xMax > _grid.Size.x || roomData.yMax + roomData.height > _grid.Size.y ||
+            anyIntersected);
+
+        return canPlace;
     }
 }

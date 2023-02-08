@@ -1,7 +1,6 @@
 ﻿using Graphs;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 using Random = System.Random;
 
 //Origin https://github.com/vazgriz/DungeonGenerator/blob/master/Assets/Scripts2D/Generator2D.cs

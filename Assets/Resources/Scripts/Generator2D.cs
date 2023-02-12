@@ -1,11 +1,12 @@
 ﻿using Graphs;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Random = System.Random;
 
 //Origin https://github.com/vazgriz/DungeonGenerator/blob/master/Assets/Scripts2D/Generator2D.cs
 
-public class Generator2D : MonoBehaviour
+public class Generator2D : NetworkBehaviour
 {
     enum CellType
     {
@@ -34,7 +35,7 @@ public class Generator2D : MonoBehaviour
 
     private const int _saveMemoryRandomTriesCount = 10;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         if (_runInStart)
         {
@@ -229,6 +230,8 @@ public class Generator2D : MonoBehaviour
         Vector3 placePosition = _root.position + _root.right * position.x + _root.forward * position.y;
         Room spawnedRoom = Instantiate(room, placePosition, _root.rotation, _root);
         spawnedRoom.MoveBoundsPosition(position);
+
+        spawnedRoom.GetComponent<NetworkObject>().Spawn(true);
 
         AddRoom(spawnedRoom);
 

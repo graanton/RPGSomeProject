@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 438414597948153594}
   - component: {fileID: 6972130431413212501}
+  - component: {fileID: 7534808126029245613}
   m_Layer: 0
   m_Name: DefaultHallway
   m_TagString: Untagged
@@ -46,6 +47,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _groundTilemap: {fileID: 975845913409481345}
+  _bounds:
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+--- !u!114 &7534808126029245613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100351351649396323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &3358434091244579827
 GameObject:
   m_ObjectHideFlags: 0

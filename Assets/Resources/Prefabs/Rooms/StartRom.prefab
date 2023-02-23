@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3647074135810749122}
   - component: {fileID: 4535795617966901275}
+  - component: {fileID: -3503639351964324362}
   m_Layer: 0
   m_Name: StartRom
   m_TagString: Untagged
@@ -51,6 +52,22 @@ MonoBehaviour:
     y: 0
     width: 3
     height: 3
+--- !u!114 &-3503639351964324362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3437495185743292230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &6995055111656105177
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +310,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile1
       objectReference: {fileID: 0}
+    - target: {fileID: 4008265265213648071, guid: 8ccce6a29eeb03440ac004ac06e01afe,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -366,6 +388,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2373529569691817873, guid: 61a45e902c47a5046b69fec785ef16a0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2661375647028462768, guid: 61a45e902c47a5046b69fec785ef16a0,
         type: 3}
@@ -446,6 +473,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2373529569691817873, guid: 61a45e902c47a5046b69fec785ef16a0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2661375647028462768, guid: 61a45e902c47a5046b69fec785ef16a0,
         type: 3}
       propertyPath: m_Name
@@ -524,6 +556,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2373529569691817873, guid: 61a45e902c47a5046b69fec785ef16a0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2661375647028462768, guid: 61a45e902c47a5046b69fec785ef16a0,
         type: 3}
@@ -609,6 +646,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile1
       objectReference: {fileID: 0}
+    - target: {fileID: 4008265265213648071, guid: 8ccce6a29eeb03440ac004ac06e01afe,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -688,6 +730,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile1
       objectReference: {fileID: 0}
+    - target: {fileID: 4008265265213648071, guid: 8ccce6a29eeb03440ac004ac06e01afe,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -761,6 +808,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2373529569691817873, guid: 61a45e902c47a5046b69fec785ef16a0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2661375647028462768, guid: 61a45e902c47a5046b69fec785ef16a0,
         type: 3}
@@ -846,6 +898,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile1
       objectReference: {fileID: 0}
+    - target: {fileID: 4008265265213648071, guid: 8ccce6a29eeb03440ac004ac06e01afe,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -924,6 +981,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4008265265213648071, guid: 8ccce6a29eeb03440ac004ac06e01afe,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

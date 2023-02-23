@@ -50,8 +50,8 @@ MonoBehaviour:
   _bounds:
     x: 0
     y: 0
-    width: 0
-    height: 0
+    width: 1
+    height: 1
 --- !u!114 &7534808126029245613
 MonoBehaviour:
   m_ObjectHideFlags: 0

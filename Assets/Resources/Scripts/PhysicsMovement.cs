@@ -5,12 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(NetworkRigidbody), typeof(Rigidbody))]
 public class PhysicsMovement : NetworkBehaviour, IGrountMovement
 {
-    [SerializeField] private MoveEvent _moveEvent;
+    [SerializeField] private MovementEvent _moveEvent;
     [SerializeField] private float _speed;
 
     private Rigidbody _rigidbody;
 
-    public MoveEvent moveEvent => _moveEvent;
+    public MovementEvent MoveEvent => _moveEvent;
 
     private void Awake()
     {

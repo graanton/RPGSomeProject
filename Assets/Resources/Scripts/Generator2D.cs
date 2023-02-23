@@ -8,7 +8,7 @@ using Random = System.Random;
 
 public class Generator2D : NetworkBehaviour
 {
-    enum CellType
+    private enum CellType
     {
         None,
         Room,
@@ -18,10 +18,9 @@ public class Generator2D : NetworkBehaviour
     [SerializeField] private Vector2Int _size;
     [SerializeField] private int _roomCount;
     [SerializeField] private int _seed;
-    [SerializeField, Range(0, 1)] private float _roomConnectionChance = 0.125f;
     [SerializeField] Pool<Room> _roomsPool;
     [SerializeField] private Hallway _hallwayPrefab;
-    [SerializeField] private Transform _root;
+    [SerializeField] private Transform _startSpawnPoint;
     [SerializeField] private List<Room> _precreatedRoom;
 
     [Space]
@@ -37,7 +36,7 @@ public class Generator2D : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (_runInStart)
+        if (IsServer && _runInStart)
         {
             Generate();
         }
@@ -47,18 +46,16 @@ public class Generator2D : NetworkBehaviour
     {
         if (_seedIsRandom)
         {
-            _random = new Random(UnityEngine.Random.Range(int.MinValue, int.MaxValue));
+            _seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         }
-        else
-        {
-            _random = new Random(_seed);
-        }
+        _random = new Random(_seed);
         _grid = new Grid2D<CellType>(_size, Vector2Int.zero);
         _rooms = new List<Room>();
     }
 
     private void Generate()
     {
+        OnValidate();
         PlaceRooms();
         Triangulate();
         CreateHallways();
@@ -84,7 +81,7 @@ public class Generator2D : NetworkBehaviour
             
 
             Vector2Int location = new Vector2Int(_random.Next(0, _size.x), _random.Next(0, _size.y));
-            Vector2Int roomSize = currentRoom.bounds.size;
+            Vector2Int roomSize = currentRoom.localBounds.size;
 
             bool add = true;
             RectInt newRoom = new RectInt(location, roomSize);
@@ -92,7 +89,7 @@ public class Generator2D : NetworkBehaviour
 
             foreach (var room in _rooms)
             {
-                if (Room.Intersect(room.bounds, buffer))
+                if (room.localBounds.Overlaps(buffer))
                 {
                     add = false;
                     break;
@@ -127,7 +124,7 @@ public class Generator2D : NetworkBehaviour
 
         foreach (var room in _rooms)
         {
-            vertices.Add(new Vertex<Room>((Vector2)room.bounds.position + ((Vector2)room.bounds.size) / 2, room));
+            vertices.Add(new Vertex<Room>((Vector2)room.localBounds.position + ((Vector2)room.localBounds.size) / 2, room));
         }
 
         _delaunay = Delaunay2D.Triangulate(vertices);
@@ -150,10 +147,7 @@ public class Generator2D : NetworkBehaviour
 
         foreach (var edge in remainingEdges)
         {
-            if (_random.NextDouble() < 1f / _roomConnectionChance)
-            {
-                _selectedEdges.Add(edge);
-            }
+            _selectedEdges.Add(edge);
         }
     }
 
@@ -166,8 +160,10 @@ public class Generator2D : NetworkBehaviour
             var startRoom = (edge.U as Vertex<Room>).Item;
             var endRoom = (edge.V as Vertex<Room>).Item;
 
-            var startPosf = startRoom.bounds.center;
-            var endPosf = endRoom.bounds.center;
+            Room[] connectedRooms = new Room[2] { startRoom, endRoom };
+
+            var startPosf = startRoom.localBounds.center;
+            var endPosf = endRoom.localBounds.center;
             var startPos = new Vector2Int((int)startPosf.x, (int)startPosf.y);
             var endPos = new Vector2Int((int)endPosf.x, (int)endPosf.y);
 
@@ -219,6 +215,13 @@ public class Generator2D : NetworkBehaviour
                     if (_grid[pos] == CellType.Hallway)
                     {
                         var placedHallway = PlaceHalway(_hallwayPrefab, pos);
+                        foreach (Room connectedRoom in connectedRooms)
+                        {
+                            if (connectedRoom.OnTheBuffer(placedHallway.localBounds))
+                            {
+                                connectedRoom.AddBufferedHallway(placedHallway);
+                            }
+                        }
                     }
                 }
             }
@@ -227,11 +230,12 @@ public class Generator2D : NetworkBehaviour
 
     private Room PlaceRoom(Room room, Vector2Int position)
     {
-        Vector3 placePosition = _root.position + _root.right * position.x + _root.forward * position.y;
-        Room spawnedRoom = Instantiate(room, placePosition, _root.rotation, _root);
+        Vector3 placePosition = _startSpawnPoint.position + _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
+        Room spawnedRoom = Instantiate(room, placePosition, _startSpawnPoint.rotation);
         spawnedRoom.MoveBoundsPosition(position);
 
-        spawnedRoom.GetComponent<NetworkObject>().Spawn(true);
+        NetworkObject networkRoom = spawnedRoom.GetComponent<NetworkObject>();
+        networkRoom.Spawn(true);
 
         AddRoom(spawnedRoom);
 
@@ -242,7 +246,7 @@ public class Generator2D : NetworkBehaviour
     {
         _rooms.Add(room);
 
-        foreach (var pos in room.bounds.allPositionsWithin)
+        foreach (var pos in room.localBounds.allPositionsWithin)
         {
             _grid[pos] = CellType.Room;
         }
@@ -260,7 +264,7 @@ public class Generator2D : NetworkBehaviour
         for (int tries = 0; tries < _saveMemoryRandomTriesCount; tries++)
         {
             Vector2Int randomPoint = new Vector2Int(_random.Next(0, _grid.Size.x - 1), _random.Next(0, _grid.Size.y - 1));
-            Vector2Int roomSize = room.bounds.size;
+            Vector2Int roomSize = room.localBounds.size;
             if (CanRoomPlace(new RectInt(randomPoint, roomSize)))
             {
                 placePositions.Add(randomPoint);
@@ -274,7 +278,7 @@ public class Generator2D : NetworkBehaviour
             {
                 for (int y = 0; x < _grid.Size.y; y += step.y)
                 {
-                    if (!CanRoomPlace(new RectInt(x, y, room.bounds.width, room.bounds.height))) { continue; }
+                    if (!CanRoomPlace(new RectInt(x, y, room.localBounds.width, room.localBounds.height))) { continue; }
                     placePositions.Add(new Vector2Int(x, y));
                 }
             }
@@ -293,7 +297,7 @@ public class Generator2D : NetworkBehaviour
         bool anyIntersected = false;
         foreach (Room currentRoom in _rooms)
         {
-            if (Room.Intersect(currentRoom.bounds, roomData))
+            if (currentRoom.localBounds.Overlaps(roomData))
             {
                 anyIntersected = true;
                 break;

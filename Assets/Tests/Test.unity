@@ -1312,6 +1312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 8197658513679395395, guid: dd655311a2c77b04e8d817b2cbb083bd,
     type: 3}
+  _spawnPoint: {fileID: 730243484}
   playerSpawnEvent:
     m_PersistentCalls:
       m_Calls:

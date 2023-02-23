@@ -2,20 +2,19 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 using Unity.Netcode;
+using System.Collections.Generic;
+using UnityEngine.Events;
 
-public class Room : NetworkBehaviour
+public class Room : NetworkBehaviour, IBoundsCorrectble
 {
     [SerializeField] private Tilemap _groundTilemap;
-
     [SerializeField] private RectInt _bounds = new RectInt();
 
-    public RectInt bounds => _bounds;
+    public RoomEvent neighboreAddEvent = new();
 
-    public static bool Intersect(RectInt a, RectInt b)
-    {
-        return !((a.position.x >= (b.position.x + b.size.x)) || ((a.position.x + a.size.x) <= b.position.x)
-            || (a.position.y >= (b.position.y + b.size.y)) || ((a.position.y + a.size.y) <= b.position.y));
-    }
+    public RectInt localBounds => _bounds;
+
+    private Dictionary<Vector2Int, Hallway> _buffer = new();
 
     public void TilesRectToLocalZeroPosition()
     {
@@ -74,17 +73,44 @@ public class Room : NetworkBehaviour
 
         size += Vector2Int.one;
 
-        transform.position = AxisConverter.XYToXZInt(position);
         _bounds = new RectInt(localPosition + position, size);
+    }
+
+    public void CorrectPosition()
+    {
+        transform.position = AxisConverter.XYToXZInt(_bounds.position);
     }
 
     public void MoveBoundsPosition(Vector2Int newPosition)
     {
-        _bounds = new RectInt(newPosition, bounds.size);
+        _bounds = new RectInt(newPosition, localBounds.size);
     }
 
     private Vector2Int TransformToCellPosition2D(Transform target)
     {
         return (Vector2Int)_groundTilemap.WorldToCell(target.position);
     }
+
+    public void AddBufferedHallway(Hallway hallway)
+    {
+        _buffer[hallway.localBounds.position] = hallway;
+        neighboreAddEvent?.Invoke(hallway);
+    }
+
+    public bool OnTheBuffer(RectInt other)
+    {
+        return localBounds.Overlaps(other) == false &&
+            new RectInt(localBounds.position - Vector2Int.one,
+            localBounds.size + Vector2Int.one * 2).Overlaps(other);
+    }
+}
+
+public class RoomEvent: UnityEvent<Room> { }
+public interface IBoundsCorrectble
+{
+    public RectInt localBounds { get; }
+    public void MoveBoundsPosition(Vector2Int newPosition);
+    public void CorrectPosition();
+    public void BoundsInit();
+    public void TilesRectToLocalZeroPosition();
 }

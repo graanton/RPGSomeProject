@@ -5,11 +5,11 @@ using UnityEngine.Events;
 
 public interface IGrountMovement
 {
-    public MoveEvent moveEvent { get; }
+    public MovementEvent MoveEvent { get; }
 
     public void Move(Vector2 direction);
     
 }
 
 [Serializable]
-public class MoveEvent: UnityEvent<Vector2> { }
+public class MovementEvent: UnityEvent<Vector2> { }

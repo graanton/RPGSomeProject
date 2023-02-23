@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2030005287765072881}
   - component: {fileID: 3369277995771127497}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tile2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,6 +141,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TileMountains(1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c1c8b6a601f545e459ad59dad0945918,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

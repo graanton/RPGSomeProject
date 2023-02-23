@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class CameraFollow : NetworkBehaviour
+public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Vector3 _offset;
 
@@ -9,7 +9,10 @@ public class CameraFollow : NetworkBehaviour
 
     public void SetTaget(NetworkObject target)
     {
-        _target = target.transform;
+        if (target.OwnerClientId == NetworkManager.Singleton.LocalClientId)
+        {
+            _target = target.transform;
+        }
     }
 
     private void Update()

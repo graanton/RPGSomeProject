@@ -1474,7 +1474,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.60459906, y: 0, z: 0, w: 0.79652995}
-  m_LocalPosition: {x: 1.452, y: 4.94, z: 0.6}
+  m_LocalPosition: {x: 17.28, y: 4.94, z: 21.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2594,6 +2594,53 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1090730367}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1668003645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1668003647}
+  - component: {fileID: 1668003646}
+  m_Layer: 0
+  m_Name: PlayerRegister
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1668003646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668003645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f58b154cc611354da8f18d033559970, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  registerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &1668003647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668003645}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1690480143
 GameObject:
   m_ObjectHideFlags: 0
@@ -2879,6 +2926,18 @@ MonoBehaviour:
       - m_Target: {fileID: 963194230}
         m_TargetAssemblyTypeName: CameraFollow, Assembly-CSharp
         m_MethodName: SetTaget
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1668003646}
+        m_TargetAssemblyTypeName: PlayerRegister, Assembly-CSharp
+        m_MethodName: RegisterPlayer
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

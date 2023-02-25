@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class PlayerSpawner : NetworkBehaviour
 {
-    [SerializeField] private NetworkObject _playerPrefab;
+    [SerializeField] private ComponentsForGet _playerPrefab;
     [SerializeField] private Transform _spawnPoint;
 
     public NetworkSpawnEvent playerSpawnEvent = new();
@@ -32,8 +32,8 @@ public class PlayerSpawner : NetworkBehaviour
 
     private void SpawnPlayer(ulong playerId)
     {
-        NetworkObject spawnedPlayer = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
-        spawnedPlayer.SpawnAsPlayerObject(playerId, true);
+        ComponentsForGet spawnedPlayer = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
+        spawnedPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(playerId, true);
 
         ClientsSpawnInvokeClientRpc(spawnedPlayer.NetworkObjectId);
     }

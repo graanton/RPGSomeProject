@@ -1,16 +1,22 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerRegister : MonoBehaviour
 {
-    public IReadOnlyCollection<NetworkObject> Players => _players;
+    public PlayerRegisterEvent registerEvent = new();
+    public IReadOnlyCollection<ComponentsForGet> Players => _players;
 
-    private List<NetworkObject> _players = new();
+    private List<ComponentsForGet> _players = new();
 
-    public void RegisterPlayer(NetworkObject player)
+    public void RegisterPlayer(ComponentsForGet player)
     {
         _players.Add(player);
+        registerEvent?.Invoke(player);
     }
 }
+
+[Serializable]
+public class PlayerRegisterEvent: UnityEvent<ComponentsForGet> { }

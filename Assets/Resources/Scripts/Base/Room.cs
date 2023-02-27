@@ -105,6 +105,7 @@ public class Room : NetworkBehaviour, IBoundsCorrectble
     }
 }
 
+[Serializable]
 public class RoomEvent: UnityEvent<Room> { }
 public interface IBoundsCorrectble
 {

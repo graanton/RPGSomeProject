@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 1827731023445144882}
   - component: {fileID: -7905235524549657382}
   - component: {fileID: -2610503682583202154}
+  - component: {fileID: 3810424088569625392}
   m_Layer: 6
   m_Name: Sworder
   m_TagString: Untagged
@@ -301,6 +302,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _maxHealth: 100
+--- !u!114 &3810424088569625392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948464067257890202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15baa8dfe32cf694f9d7d6772d5efeb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  exitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &6977598490070615632
 PrefabInstance:
   m_ObjectHideFlags: 0

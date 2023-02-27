@@ -7,11 +7,11 @@ using UnityEngine.Events;
 public class PlayerRegister : MonoBehaviour
 {
     public PlayerRegisterEvent registerEvent = new();
-    public IReadOnlyCollection<ComponentsForGet> Players => _players;
+    public IReadOnlyCollection<NetworkObject> Players => _players;
 
-    private List<ComponentsForGet> _players = new();
+    private List<NetworkObject> _players = new();
 
-    public void RegisterPlayer(ComponentsForGet player)
+    public void RegisterPlayer(NetworkObject player)
     {
         _players.Add(player);
         registerEvent?.Invoke(player);
@@ -19,4 +19,4 @@ public class PlayerRegister : MonoBehaviour
 }
 
 [Serializable]
-public class PlayerRegisterEvent: UnityEvent<ComponentsForGet> { }
+public class PlayerRegisterEvent: UnityEvent<NetworkObject> { }

@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CharacterData : MonoBehaviour
+[CreateAssetMenu(fileName = "Dude", menuName = "Stand data")]
+public class CharacterData : ScriptableObject
 {
-    [SerializeField] private GameObject _characterPrefab, _unlockCharacterRender, _lockCharacterRender;
-    [SerializeField] private bool _isOpened;
+    [SerializeField] private NetworkObject _characterPrefab;
+    [SerializeField] private Transform _unlockCharacterRender, _lockCharacterRender;
+    [SerializeField] private bool _isUnlocked;
 
-    public GameObject CharacterPrefab => _characterPrefab;
-    public GameObject UnlockCharacterRender => _unlockCharacterRender;
-    public GameObject LockCharacterRender => _unlockCharacterRender;
-    public bool IsOpened => _isOpened;
+    public NetworkObject CharacterPrefab => _characterPrefab;
+    public Transform UnlockCharacterRender => _unlockCharacterRender;
+    public Transform LockCharacterRender => _unlockCharacterRender;
+    public bool IsUnlocked => _isUnlocked;
 }

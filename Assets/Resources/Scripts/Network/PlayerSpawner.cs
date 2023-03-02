@@ -18,11 +18,6 @@ public class PlayerSpawner : NetworkBehaviour, ISceneLoadHandler<CharacterData>
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
 
-    public override void OnNetworkSpawn()
-    {
-        OnClientConnected(OwnerClientId);
-    }
-
     private void OnClientConnected(ulong id)
     {
         if (IsHost)

@@ -20,6 +20,7 @@ public class Generator2D : NetworkBehaviour
     [SerializeField] private int _seed;
     [SerializeField] Pool<Room> _roomsPool;
     [SerializeField] private Hallway _hallwayPrefab;
+    [SerializeField] private Hallway _hallwayBorderPrefab;
     [SerializeField] private Transform _startSpawnPoint;
     [SerializeField] private List<Room> _precreatedRoom;
 
@@ -60,6 +61,7 @@ public class Generator2D : NetworkBehaviour
         Triangulate();
         CreateHallways();
         PathfindHallways();
+        CreateHallwaysBorder();
     }
 
     private void PlaceRooms()
@@ -116,8 +118,6 @@ public class Generator2D : NetworkBehaviour
         }
     }
 
-    
-
     private void Triangulate()
     {
         List<Vertex> vertices = new List<Vertex>();
@@ -148,6 +148,35 @@ public class Generator2D : NetworkBehaviour
         foreach (var edge in remainingEdges)
         {
             _selectedEdges.Add(edge);
+        }
+    }
+
+    private void CreateHallwaysBorder()
+    {
+        HashSet<Vector2Int> borderPoints = new();
+
+        for (int x = 1; x < _grid.Size.x - 1; x++)
+        {
+            for (int y = 1; y < _grid.Size.y - 1; y++)
+            {
+                if (_grid[new Vector2Int(x, y)] == CellType.Hallway)
+                {
+                    foreach (Vector2Int point in 
+                        new RectInt(x - 1, y - 1, 3, 3).allPositionsWithin)
+                    {
+                        borderPoints.Add(point);
+                    }
+                }
+            }
+        }
+
+        foreach (var point in borderPoints)
+        {
+            if (_grid[point] == CellType.None)
+            {
+                PlaceHalway(_hallwayBorderPrefab, point);
+                _grid[point] = CellType.Hallway;
+            }
         }
     }
 
@@ -230,7 +259,8 @@ public class Generator2D : NetworkBehaviour
 
     private Room PlaceRoom(Room room, Vector2Int position)
     {
-        Vector3 placePosition = _startSpawnPoint.position + _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
+        Vector3 placePosition = _startSpawnPoint.position +
+            _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
         Room spawnedRoom = Instantiate(room, placePosition, _startSpawnPoint.rotation);
         spawnedRoom.MoveBoundsPosition(position);
 
@@ -254,7 +284,15 @@ public class Generator2D : NetworkBehaviour
 
     private Hallway PlaceHalway(Hallway hallway, Vector2Int position)
     {
-        return (Hallway)PlaceRoom(hallway, position);
+        Vector3 placePosition = _startSpawnPoint.position +
+            _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
+        Hallway spawnedHallway = Instantiate(hallway, placePosition, _startSpawnPoint.rotation);
+        spawnedHallway.MoveBoundsPosition(position);
+
+        NetworkObject networkHallway = spawnedHallway.GetComponent<NetworkObject>();
+        networkHallway.Spawn(true);
+
+        return spawnedHallway;
     }
 
     public Room GarantedRandomPlaceRoom(Room room, Vector2Int step)

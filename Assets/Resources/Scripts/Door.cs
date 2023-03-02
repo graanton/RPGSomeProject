@@ -13,11 +13,8 @@ public class Door : Tile3dBase
     {
         _room.neighboreAddEvent.AddListener(OnNeighboreAdded);
         _targetWaiter.enterEvent.AddListener(OnPlayerEnter);
-    }
-
-    private void Start()
-    {
-        Open();
+        Close();
+        BoundsInit();
     }
 
     private void OnPlayerEnter(PlayerHealth player)
@@ -27,12 +24,9 @@ public class Door : Tile3dBase
 
     private void OnNeighboreAdded(Room neighbore)
     {
-        RectInt globalBounds = new RectInt(localBounds.position + _room.localBounds.position,
-            localBounds.size);
-
-        bool isMyNeighbore = neighbore.OnTheBuffer(globalBounds)
+        bool isMyNeighbore = neighbore.OnTheBuffer(localBounds)
              &&
-            Vector2Int.Distance(_room.localBounds.position + localBounds.position,
+            Vector2Int.Distance(localBounds.position,
             neighbore.localBounds.position) == 1;
 
         if (isMyNeighbore)

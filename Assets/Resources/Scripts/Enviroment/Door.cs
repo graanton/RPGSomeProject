@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,7 +32,7 @@ public class Door : Tile3dBase
 
         if (isMyNeighbore)
         {
-            Open();
+            OpenClientRpc();
         }
     }
 
@@ -40,8 +41,14 @@ public class Door : Tile3dBase
         closeEvent?.Invoke();
     }
 
-    public void Open()
+    [ClientRpc]
+    private void OpenClientRpc()
     {
         openEvent?.Invoke();
+    }
+
+    public void Open()
+    {
+        OpenClientRpc();
     }
 }

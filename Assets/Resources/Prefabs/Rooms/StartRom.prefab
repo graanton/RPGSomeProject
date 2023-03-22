@@ -32,7 +32,7 @@ Transform:
   m_Children:
   - {fileID: 3570526265684166540}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4535795617966901275
 MonoBehaviour:
@@ -48,10 +48,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _groundTilemap: {fileID: 606174797782061372}
   _bounds:
-    x: 0
-    y: 0
+    x: 16
+    y: 21
     width: 3
     height: 3
+  neighboreAddEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-3503639351964324362
 MonoBehaviour:
   m_ObjectHideFlags: 0

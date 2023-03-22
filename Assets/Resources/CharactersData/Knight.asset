@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5789407be3127f247a3d256e518a0f4c, type: 3}
   m_Name: Knight
   m_EditorClassIdentifier: 
-  _characterPrefab: {fileID: 8197658513679395395, guid: dd655311a2c77b04e8d817b2cbb083bd,
+  _characterPrefab: {fileID: 5948464067257890202, guid: dd655311a2c77b04e8d817b2cbb083bd,
     type: 3}
   _unlockCharacterRender: {fileID: -8679921383154817045, guid: 28353572c5b9847438fca456992f5d60,
     type: 3}
   _lockCharacterRender: {fileID: -8679921383154817045, guid: 9e428785a2baf8143ac62dffc276ef74,
     type: 3}
-  _isUnlocked: 0
+  _isUnlocked: 1

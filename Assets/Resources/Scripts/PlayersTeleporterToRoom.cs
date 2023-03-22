@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,7 +7,10 @@ public class PlayersTeleporterToRoom : MonoBehaviour
 
     private void Awake()
     {
-        _playersRegister.registerEvent.AddListener(OnPlayerRigistered);
+        if (NetworkManager.Singleton.IsServer)
+        {
+            _playersRegister.registerEvent.AddListener(OnPlayerRigistered);
+        }
     }
 
     private void OnPlayerRigistered(NetworkObject player)

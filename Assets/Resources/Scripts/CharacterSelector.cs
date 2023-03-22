@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterSelector : MonoBehaviour
 {
     [SerializeField] private CharacterStand _standPrefab;
-    [SerializeField] private CharacterData[] _charactersData;
+    [SerializeField] private CharacterDatabase _charactersData;
     [SerializeField] private Transform _root;
     [SerializeField] private Vector3 _spacing = Vector3.left * 2;
     [SerializeField] private float _changeSpeed = 3;
@@ -14,16 +14,17 @@ public class CharacterSelector : MonoBehaviour
     private HashSet<CharacterStand> _instantiatedStands = new();
     private int _selectedStandIndex = 0;
 
-    public CharacterData SelectedCharacter => _charactersData[_selectedStandIndex];
+    public CharacterData SelectedCharacter => _charactersData.Characters[_selectedStandIndex];
+    public int SelectedCharacterIndex => _selectedStandIndex;
 
     private void Start()
     {
-        for(int i = 0; i < _charactersData.Length; i++)
+        for(int i = 0; i < _charactersData.Characters.Length; i++)
         {
             CharacterStand stand = Instantiate(_standPrefab,
                 _root.position + _spacing * i, _root.rotation, _root);
 
-            stand.SetCharacter(_charactersData[i]);
+            stand.SetCharacter(_charactersData.Characters[i]);
 
             _instantiatedStands.Add(stand);
         }
@@ -51,9 +52,9 @@ public class CharacterSelector : MonoBehaviour
     public void ChangeNext()
     {
         _selectedStandIndex++;
-        if (_selectedStandIndex >= _charactersData.Length)
+        if (_selectedStandIndex >= _charactersData.Characters.Length)
         {
-            _selectedStandIndex = _charactersData.Length - 1;
+            _selectedStandIndex = _charactersData.Characters.Length - 1;
         }
     }
 

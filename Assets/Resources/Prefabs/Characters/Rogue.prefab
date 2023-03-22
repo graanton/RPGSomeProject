@@ -32,6 +32,37 @@ Transform:
   m_Father: {fileID: 3881079668202685827}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &641109309687561571
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8223770873266979537}
+  m_Layer: 6
+  m_Name: Attack point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8223770873266979537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641109309687561571}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8348823263480530855}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4015943237552384846
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,6 +112,7 @@ GameObject:
   - component: {fileID: -7905235524549657382}
   - component: {fileID: -2610503682583202154}
   - component: {fileID: 3810424088569625392}
+  - component: {fileID: 3297376646053618988}
   m_Layer: 6
   m_Name: Rogue
   m_TagString: Untagged
@@ -101,6 +133,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3881079668202685827}
+  - {fileID: 8223770873266979537}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -238,6 +271,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _maxHealth: 100
+  _deadEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8197658513679395395, guid: dd655311a2c77b04e8d817b2cbb083bd,
+          type: 3}
+        m_TargetAssemblyTypeName: Unity.Netcode.NetworkObject, Unity.Netcode.Runtime
+        m_MethodName: Despawn
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  HitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3810424088569625392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,6 +308,21 @@ MonoBehaviour:
   exitEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3297376646053618988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948464067257890202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61e730196e412b947bf4efdd2a43f943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _projectilePrefab: {fileID: -4536384297606886651, guid: 996cbf3ae22e82d48b909e51f360d5d5,
+    type: 3}
+  _attackPoint: {fileID: 8223770873266979537}
 --- !u!1001 &4535827239728507209
 PrefabInstance:
   m_ObjectHideFlags: 0

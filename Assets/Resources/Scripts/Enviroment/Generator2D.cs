@@ -45,10 +45,6 @@ public class Generator2D : NetworkBehaviour
 
     private void OnValidate()
     {
-        if (_seedIsRandom)
-        {
-            _seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-        }
         _random = new Random(_seed);
         _grid = new Grid2D<CellType>(_size, Vector2Int.zero);
         _rooms = new List<Room>();
@@ -56,7 +52,11 @@ public class Generator2D : NetworkBehaviour
 
     private void Generate()
     {
-        OnValidate();
+        if (_seedIsRandom)
+        {
+            _seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        }
+
         PlaceRooms();
         Triangulate();
         CreateHallways();

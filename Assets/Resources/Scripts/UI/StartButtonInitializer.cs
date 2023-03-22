@@ -11,6 +11,6 @@ public class StartButtonInitializer : MonoBehaviour
 
     private void Start()
     {
-        _startButton.onClick.AddListener( delegate () { SampleScene.Load(_characterSelector.SelectedCharacter); });
+        _startButton.onClick.AddListener( delegate () { SampleScene.Load(_characterSelector.SelectedCharacterIndex); });
     }
 }

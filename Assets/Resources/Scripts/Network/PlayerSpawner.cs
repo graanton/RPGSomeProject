@@ -1,37 +1,28 @@
+using IJunior.TypedScenes;
 using System;
-using System.Collections;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
-using IJunior.TypedScenes;
 
-public class PlayerSpawner : NetworkBehaviour, ISceneLoadHandler<CharacterData>
+public class PlayerSpawner : NetworkBehaviour, ISceneLoadHandler<int>
 {
     [SerializeField] private Transform _spawnPoint;
-    [SerializeField] private CharacterData _playerData;
+    [SerializeField] private int _characterIndex;
+    [SerializeField] private CharacterDatabase _characterDatabase;
 
     public NetworkSpawnEvent playerSpawnEvent = new();
 
-    private void Start()
+    private void SpawnPlayer(ulong playerId, int characterIndex)
     {
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-    }
+        GameObject spawnedPlayer = Instantiate(
+            _characterDatabase.Characters[characterIndex].CharacterPrefab,
+            _spawnPoint.position, Quaternion.identity);
 
-    private void OnClientConnected(ulong id)
-    {
-        if (IsHost)
-        {
-            SpawnPlayer(id);
-        }
-    }
+        NetworkObject networkOfPlayer = spawnedPlayer.GetComponent<NetworkObject>();
 
-    private void SpawnPlayer(ulong playerId)
-    {
-        var spawnedPlayer = Instantiate(_playerData.CharacterPrefab, _spawnPoint.position, Quaternion.identity);
-        spawnedPlayer.SpawnAsPlayerObject(playerId, true);
+        networkOfPlayer.SpawnAsPlayerObject(playerId, true);
 
-        ClientsSpawnInvokeClientRpc(spawnedPlayer.NetworkObjectId);
+        ClientsSpawnInvokeClientRpc(networkOfPlayer.NetworkObjectId);
     }
 
     [ClientRpc]
@@ -40,9 +31,25 @@ public class PlayerSpawner : NetworkBehaviour, ISceneLoadHandler<CharacterData>
         playerSpawnEvent?.Invoke(GetNetworkObject(objectId));
     }
 
-    public void OnSceneLoaded(CharacterData data)
+    public void OnSceneLoaded(int characterIndex)
     {
-        _playerData = data;
+        _characterIndex = characterIndex;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsClient)
+            SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, _characterIndex);
+        else
+        {
+            SpawnPlayer(OwnerClientId, _characterIndex);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnPlayerServerRpc(ulong ownerId, int characterIndex)
+    {
+        SpawnPlayer(ownerId, characterIndex);
     }
 }
 

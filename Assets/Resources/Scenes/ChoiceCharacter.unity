@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -200,6 +200,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -880,9 +881,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _standPrefab: {fileID: 2375158489276456194, guid: 7e51cf93a521a4044972b2c236874f3c,
     type: 3}
-  _charactersData:
-  - {fileID: 11400000, guid: 7b385b3f7ded3f34fb5fd81a8ca29e7a, type: 2}
-  - {fileID: 11400000, guid: 34b39e242bebe8e4c8a627b70fdc1ed8, type: 2}
+  _charactersData: {fileID: -5609449871382934482, guid: 34f6eebed0f807a4da4bafbe9e101781,
+    type: 3}
   _root: {fileID: 1159459359}
   _spacing: {x: 2, y: 0, z: 0}
   _changeSpeed: 3
@@ -1077,9 +1077,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0

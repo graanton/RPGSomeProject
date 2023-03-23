@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Tests/PolygonesTest.unity
+    guid: 9e3d3ac94ca769a4f869ea9a7cf9d0b4
+  - enabled: 1
     path: Assets/Resources/Scenes/ChoiceCharacter.unity
     guid: 5e113903dd558f54fae164bee83e772a
   - enabled: 1

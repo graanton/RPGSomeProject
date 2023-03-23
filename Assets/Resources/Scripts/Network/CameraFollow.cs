@@ -5,7 +5,7 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Vector3 _offset;
 
-    private Transform _target;
+    [SerializeField] private Transform _target;
 
     public void SetTaget(NetworkObject target)
     {

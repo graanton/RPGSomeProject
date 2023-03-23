@@ -320,9 +320,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61e730196e412b947bf4efdd2a43f943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: -4536384297606886651, guid: 996cbf3ae22e82d48b909e51f360d5d5,
+  _projectilePrefab: {fileID: -3508776428077654105, guid: 996cbf3ae22e82d48b909e51f360d5d5,
     type: 3}
   _attackPoint: {fileID: 8223770873266979537}
+  _fireRate: 1
 --- !u!1001 &4535827239728507209
 PrefabInstance:
   m_ObjectHideFlags: 0

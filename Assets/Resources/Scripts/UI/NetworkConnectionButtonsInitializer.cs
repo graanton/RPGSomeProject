@@ -9,8 +9,11 @@ public class NetworkConnectionButtonsInitializer : MonoBehaviour
 
     private void Start()
     {
-        _client.onClick.AddListener(StartClient);
+        if (_client != null)
+            _client.onClick.AddListener(StartClient);
+        if (_host != null)
         _host.onClick.AddListener(StartHost);
+        if (_server != null)
         _server.onClick.AddListener(StartServer);
     }
 

@@ -45,18 +45,23 @@ public class Projectile : NetworkBehaviour
     {
         if (other.gameObject != _owner)
         {
-            if (other.gameObject.layer == _obstaclesLayer)
+            if (IsLayerInMask(other.gameObject.layer, _obstaclesLayer))
             {
                 Destroy(gameObject);
             }
-            if (other.gameObject.layer == _targetsLayer &&
-                other.TryGetComponent(out IDamageable damageClaimer))
+            if (IsLayerInMask(other.gameObject.layer, _targetsLayer) &&
+                other.TryGetComponent(out Health damageClaimer))
             {
                 hitEvent?.Invoke(damageClaimer);
             }
         }
     }
+
+    private bool IsLayerInMask(int otherLayer, LayerMask mask)
+    {
+        return mask == (mask | (1 << otherLayer));
+    }
 }
 
 [Serializable]
-public class HitEvent: UnityEvent<IDamageable> { }
+public class HitEvent: UnityEvent<Health> { }

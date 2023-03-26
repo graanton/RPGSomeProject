@@ -43,7 +43,7 @@ public class SwordAttack : NetworkBehaviour
 
         foreach (Collider hit in targets)
         {
-            if (hit.TryGetComponent(out IDamageable damageableComponent))
+            if (hit.TryGetComponent(out Health damageableComponent))
             {
                 damageableComponent.TakeDamage(_data.Damage);
             }

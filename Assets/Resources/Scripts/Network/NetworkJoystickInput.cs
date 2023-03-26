@@ -5,17 +5,7 @@ using Unity.Netcode;
 public class NetworkJoystickInput : NetworkBehaviour
 {
     [SerializeField] private Joystick _joystick;
-    [SerializeField] private PhysicsMovement _physicsMovement;
-
-    private IGrountMovement _movement;
-
-    private void Start()
-    {
-        if (_physicsMovement != null)
-        {
-            _movement = _physicsMovement;
-        }
-    }
+    [SerializeField] private Movement _movement;
 
     public void SetTarget(NetworkObject target)
     {
@@ -29,7 +19,7 @@ public class NetworkJoystickInput : NetworkBehaviour
     {
         if (_movement != null && _joystick.Direction.magnitude > 0)
         {
-            _movement.Move(_joystick.Direction);
+            _movement.Move(AxisConverter.XYToXZ(_joystick.Direction));
         }
     }
 }

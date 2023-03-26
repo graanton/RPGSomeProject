@@ -17,7 +17,7 @@ public class EnemiesRoom : Room
     private void OnEnemySpawend(Enemy enemy)
     {
         _enemyCount++;
-        enemy.DeadEvent.AddListener(OnEnemyDead);
+        enemy.OnDeath.AddListener(OnEnemyDead);
     }
 
     private void OnEnemyDead()

@@ -3,23 +3,24 @@ using Unity.Netcode.Components;
 using UnityEngine;
 
 [RequireComponent(typeof(NetworkRigidbody), typeof(Rigidbody))]
-public class PhysicsMovement : NetworkBehaviour, IGrountMovement
+public class PhysicsMovement : Movement
 {
     [SerializeField] private MovementEvent _moveEvent;
     [SerializeField] private float _speed;
 
     private Rigidbody _rigidbody;
 
-    public MovementEvent MoveEvent => _moveEvent;
+    public override MovementEvent MoveEvent => _moveEvent;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    public void Move(Vector2 direction)
+    public override void Move(Vector3 direction)
     {
-        Vector3 offset = AxisConverter.XYToXZ(direction) * _speed * Time.deltaTime;
+        Vector3 offset = direction * _speed * Time.deltaTime;
         _rigidbody.MovePosition(_rigidbody.position + offset);
+        _moveEvent?.Invoke(offset);
     }
 }

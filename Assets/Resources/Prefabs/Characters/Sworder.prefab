@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: -7905235524549657382}
   - component: {fileID: -2610503682583202154}
   - component: {fileID: 3810424088569625392}
+  - component: {fileID: -1696381257936190358}
   m_Layer: 6
   m_Name: Sworder
   m_TagString: Untagged
@@ -318,9 +319,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  HitEvent:
+  _hitEvent:
     m_PersistentCalls:
       m_Calls: []
+  _isDead: 0
 --- !u!114 &3810424088569625392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,6 +341,19 @@ MonoBehaviour:
   exitEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-1696381257936190358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948464067257890202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898ca348b34730e49b1d78a9ec37be34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movement: {fileID: 388693780888661042}
 --- !u!1 &6051906272749958609
 GameObject:
   m_ObjectHideFlags: 0

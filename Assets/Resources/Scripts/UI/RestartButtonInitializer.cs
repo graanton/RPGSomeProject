@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using IJunior.TypedScenes;
 
 public class RestartButtonInitializer : MonoBehaviour
 {
@@ -8,12 +9,7 @@ public class RestartButtonInitializer : MonoBehaviour
 
     private void Start()
     {
-        _reloadButton.onClick.AddListener(Disconnect);
-        _reloadButton.onClick.AddListener(SceneReloadble.ReloadScene); 
-    }
-
-    private void Disconnect()
-    {
-        NetworkManager.Singleton.Shutdown();
+        _reloadButton.onClick.AddListener(() => ChoiceCharacter.Load());
+        _reloadButton.onClick.AddListener(() => NetworkManager.Singleton.Shutdown());
     }
 }

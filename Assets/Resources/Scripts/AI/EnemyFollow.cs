@@ -16,7 +16,7 @@ public class EnemyFollow : NetworkBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _agent.enabled = false;
-        _targetDetecter.haveTargetEvent.AddListener(AddTarget); 
+        _targetDetecter.playerEvent.AddListener(AddTarget); 
     }
 
     public override void OnNetworkSpawn()
@@ -39,6 +39,7 @@ public class EnemyFollow : NetworkBehaviour
 
     private void AddTarget(PlayerHealth target)
     {
+        target.OnDeath.AddListener(() => OnPlayerDie(target));
         _targets.Add(target);
     }
 
@@ -46,13 +47,14 @@ public class EnemyFollow : NetworkBehaviour
     {
         if (_targets.Count == 0)
         {
-            Debug.LogWarning("Nothing players");
+            Debug.LogError("Nothing players");
             return null;
         }
         Vector3 position = transform.position;
         Transform nearestTarget = _targets.ElementAt(0).transform;
         foreach (PlayerHealth target in _targets)
         {
+
             if (Vector3.Distance(position, target.transform.position) < 
                 Vector3.Distance(position, nearestTarget.position))
             {
@@ -60,5 +62,10 @@ public class EnemyFollow : NetworkBehaviour
             }
         }
         return nearestTarget;
+    }
+
+    private void OnPlayerDie(PlayerHealth player)
+    {
+        _targets.Remove(player);
     }
 }

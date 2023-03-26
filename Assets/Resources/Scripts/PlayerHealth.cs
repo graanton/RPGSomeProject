@@ -3,42 +3,37 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerHealth : NetworkBehaviour, IDamageable
+public class PlayerHealth : Health
 {
     [SerializeField, Min(0)] private int _health, _maxHealth;
     [SerializeField] private UnityEvent _deadEvent = new();
+    [SerializeField] private DamageEvent _hitEvent = new();
+    [SerializeField] private bool _isDead;
+
+    public override int MaxHealth => _maxHealth;
+    public override int CurrentHealth => _health;
+
+    public override UnityEvent OnDeath => _deadEvent;
+
+    public override DamageEvent OnHit => _hitEvent;
+
     
-    public int Health => _health;
-    public int MaxHealth => _maxHealth;
-
-    public UnityEvent DeadEvent => _deadEvent;
-    public UnityEvent HitEvent = new();
-
-    private NetworkObject _networkObject;
-
-    private void Awake()
-    {
-        _networkObject = GetComponent<NetworkObject>();
-    }
 
     public override void OnNetworkSpawn()
     {
-        DeadEvent.AddListener(OnDead);
+        _deadEvent.AddListener(OnDie);
     }
 
-    private void OnDead()
+    private void OnDie()
     {
-        if (_networkObject.IsSpawned)
-        {
-            _networkObject.Despawn();
-        }
+        Destroy(gameObject);
     }
 
-    public void TakeDamage(int damage)
+    public override void TakeDamage(int damage)
     {
         if (damage <= 0)
         {
-            Debug.LogError("Is not damage");
+            Debug.LogError("Invalid damage value");
             return;
         }
 
@@ -52,10 +47,15 @@ public class PlayerHealth : NetworkBehaviour, IDamageable
     private void HitClientRpc(int damage)
     {
         _health -= damage;
-        HitEvent?.Invoke();
+        _hitEvent?.Invoke(damage);
         if (_health <= 0)
         {
             _deadEvent?.Invoke();
         }
+    }
+
+    public override void Heal(int amount)
+    {
+        throw new NotImplementedException();
     }
 }

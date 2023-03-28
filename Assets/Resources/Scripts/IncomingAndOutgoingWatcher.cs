@@ -1,21 +1,15 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class IncomingAndOutgoingWatcher : MonoBehaviour
 {
-    [SerializeField] private Room _incomingRoom;
-
-    public PlayerEvent enterEvent = new();
-    public PlayerEvent leaveEvent = new();
-
-    public Room IncomingRoom => _incomingRoom;
+    public HealthEvent enterEvent = new();
+    public HealthEvent leaveEvent = new();
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out PlayerHealth player))
+        if (other.TryGetComponent(out Health player))
         {
             enterEvent?.Invoke(player);
         }
@@ -23,7 +17,7 @@ public class IncomingAndOutgoingWatcher : MonoBehaviour
     
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out PlayerHealth player))
+        if (other.TryGetComponent(out Health player))
         {
             leaveEvent?.Invoke(player);
         }
@@ -31,4 +25,4 @@ public class IncomingAndOutgoingWatcher : MonoBehaviour
 }
 
 [Serializable]
-public class PlayerEvent: UnityEvent<PlayerHealth> { }
+public class HealthEvent: UnityEvent<Health> { }

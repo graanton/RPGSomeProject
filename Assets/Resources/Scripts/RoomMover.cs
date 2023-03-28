@@ -20,7 +20,14 @@ public class RoomMover : MonoBehaviour
     {
         if (collider.TryGetComponent(out IncomingAndOutgoingWatcher watcher))
         {
-            roomEvent?.Invoke(watcher.IncomingRoom);
+            if (watcher.TryGetComponent(out Room room))
+            {
+                roomEvent?.Invoke(room);
+            }
+            else
+            {
+                throw new System.Exception("Add Room component for watcher");
+            }
         }
     }
 }

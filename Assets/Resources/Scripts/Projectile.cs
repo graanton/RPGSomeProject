@@ -11,6 +11,7 @@ public class Projectile : NetworkBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private LayerMask _targetsLayer;
     [SerializeField] private LayerMask _obstaclesLayer;
+    [SerializeField] private int _damage;
 
     public Vector3 direction;
     public HitEvent hitEvent = new();
@@ -52,6 +53,7 @@ public class Projectile : NetworkBehaviour
             if (IsLayerInMask(other.gameObject.layer, _targetsLayer) &&
                 other.TryGetComponent(out Health damageClaimer))
             {
+                damageClaimer.TakeDamage(_damage);
                 hitEvent?.Invoke(damageClaimer);
             }
         }

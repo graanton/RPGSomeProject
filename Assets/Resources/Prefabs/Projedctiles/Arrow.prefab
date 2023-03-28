@@ -171,6 +171,7 @@ MonoBehaviour:
   _obstaclesLayer:
     serializedVersion: 2
     m_Bits: 256
+  _damage: 999
   direction: {x: 0, y: 0, z: 0}
   hitEvent:
     m_PersistentCalls:

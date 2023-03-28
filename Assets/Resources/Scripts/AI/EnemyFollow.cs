@@ -10,7 +10,7 @@ public class EnemyFollow : NetworkBehaviour
     [SerializeField] private Enemy _targetDetecter;
 
     private NavMeshAgent _agent;
-    private HashSet<PlayerHealth> _targets = new();
+    private HashSet<Health> _targets = new();
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class EnemyFollow : NetworkBehaviour
         }
     }
 
-    private void AddTarget(PlayerHealth target)
+    private void AddTarget(Health target)
     {
         target.OnDeath.AddListener(() => OnPlayerDie(target));
         _targets.Add(target);
@@ -64,7 +64,7 @@ public class EnemyFollow : NetworkBehaviour
         return nearestTarget;
     }
 
-    private void OnPlayerDie(PlayerHealth player)
+    private void OnPlayerDie(Health player)
     {
         _targets.Remove(player);
     }

@@ -1,17 +1,18 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemiesRoom : Room
+public class EnemiesRoom : LockedRoomBase
 {
     [SerializeField] private EnemiesSpawner _enemiesSpawner;
 
-    public UnityEvent allEnemiesDeadEvent = new();
-
     private int _enemyCount = 0;
+    private bool _isLocked = false;
 
     public void Awake()
     {
         _enemiesSpawner.spawnEvent.AddListener(OnEnemySpawend);
+        OpenEvent.AddListener(() => _isLocked = false);
+        LockEvent.AddListener(() => _isLocked = true);
     }
 
     private void OnEnemySpawend(Enemy enemy)
@@ -25,7 +26,12 @@ public class EnemiesRoom : Room
         _enemyCount--;
         if (_enemyCount == 0)
         {
-            allEnemiesDeadEvent?.Invoke();
+            Open();
         }
+    }
+
+    public override bool IsLocked()
+    {
+         return _isLocked;
     }
 }

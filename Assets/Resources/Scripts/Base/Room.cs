@@ -10,11 +10,9 @@ public class Room : NetworkBehaviour, IBoundsCorrectble
     [SerializeField] private Tilemap _groundTilemap;
     [SerializeField] private RectInt _bounds = new RectInt();
 
-    public RoomEvent neighboreAddEvent = new();
+    public RoomEvent HallwayAddEvent = new();
 
     public RectInt localBounds => _bounds;
-
-    private Dictionary<Vector2Int, Hallway> _buffer = new();
 
     public void TilesRectToLocalZeroPosition()
     {
@@ -93,8 +91,7 @@ public class Room : NetworkBehaviour, IBoundsCorrectble
 
     public void AddBufferedHallway(Hallway hallway)
     {
-        _buffer[hallway.localBounds.position] = hallway;
-        neighboreAddEvent?.Invoke(hallway);
+        HallwayAddEvent?.Invoke(hallway);
     }
 
     public bool OnTheBuffer(RectInt other)

@@ -1,24 +1,33 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Door : Tile3dBase
 {
-    [SerializeField] private Room _room;
+    [SerializeField] private LockedRoomBase _room;
     [SerializeField] private IncomingAndOutgoingWatcher _targetWaiter;
+
+    private bool _hasNeighbore = false;
 
     public UnityEvent openEvent = new();
     public UnityEvent closeEvent = new();
 
-    private void Awake()
+    public void Awake()
     {
-        _room.neighboreAddEvent.AddListener(OnNeighboreAdded);
+        _room.HallwayAddEvent.AddListener(OnNeighboreAdded);
         _targetWaiter.enterEvent.AddListener(OnPlayerEnter);
         Close();
         BoundsInit();
+        _room.OpenEvent.AddListener(OnRoomOpened);
     }
 
-    private void OnPlayerEnter(PlayerHealth player)
+    private void OnRoomOpened()
+    {
+        Open();
+    }
+
+    private void OnPlayerEnter(Health player)
     {
         Close();
     }
@@ -32,7 +41,8 @@ public class Door : Tile3dBase
 
         if (isMyNeighbore)
         {
-            OpenClientRpc();
+            _hasNeighbore = true;
+            Open();
         }
     }
 
@@ -41,14 +51,11 @@ public class Door : Tile3dBase
         closeEvent?.Invoke();
     }
 
-    [ClientRpc]
-    private void OpenClientRpc()
-    {
-        openEvent?.Invoke();
-    }
-
     public void Open()
     {
-        OpenClientRpc();
+        if (_hasNeighbore)
+        {
+            openEvent?.Invoke();
+        }
     }
 }

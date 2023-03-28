@@ -11,7 +11,7 @@ public class Enemy : Health
     [SerializeField] private int _health, _maxHealth;
     [SerializeField] private DamageEvent _damageEvent = new();
 
-    public PlayerEvent playerEvent = new();
+    public HealthEvent playerEvent = new();
 
     public override UnityEvent OnDeath => _deadEvent;
     public override DamageEvent OnHit => _damageEvent;
@@ -25,10 +25,9 @@ public class Enemy : Health
 
     public void SetTargetDetecter(IncomingAndOutgoingWatcher detecter)
     {
-        detecter.enterEvent.AddListener(TargetInvoke);
+        detecter.enterEvent.AddListener(
+            (Health player) => playerEvent?.Invoke(player));
     }
-
-    private void TargetInvoke(PlayerHealth player) => playerEvent?.Invoke(player);
 
     public override void TakeDamage(int damage)
     {
@@ -39,6 +38,12 @@ public class Enemy : Health
         }
         if (IsServer)
         {
+            _health -= damage;
+            if (_health <= 0)
+            {
+                _deadEvent?.Invoke();
+                Destroy(gameObject);
+            }
             TakeDamageClientRpc(damage);
         }
     }
@@ -46,7 +51,7 @@ public class Enemy : Health
     [ClientRpc]
     private void TakeDamageClientRpc(int damage)
     {
-        
+        OnHit?.Invoke(damage);
     }
 
     public override void Heal(int amount)

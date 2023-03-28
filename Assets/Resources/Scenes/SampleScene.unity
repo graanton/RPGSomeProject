@@ -1477,18 +1477,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 4.94, z: -1.1}
   _target: {fileID: 0}
---- !u!114 &972031002 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4535795617966901275, guid: 6eb1569800d7b434e9399a374773ec96,
-    type: 3}
-  m_PrefabInstance: {fileID: 1090730367}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1662102000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c67540965e55744194b74f89fe469e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &976833210
 GameObject:
   m_ObjectHideFlags: 0
@@ -1552,12 +1540,6 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 1662102000}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 4836596623739150116, guid: fbe53923ef90b314fb186a1f6e62d93a,
-        type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -1784,10 +1766,20 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 2841291372
       objectReference: {fileID: 0}
+    - target: {fileID: 1398955086982648177, guid: 6eb1569800d7b434e9399a374773ec96,
+        type: 3}
+      propertyPath: _bounds.x
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1398955086982648177, guid: 6eb1569800d7b434e9399a374773ec96,
+        type: 3}
+      propertyPath: _bounds.y
+      value: 21
+      objectReference: {fileID: 0}
     - target: {fileID: 3437495185743292230, guid: 6eb1569800d7b434e9399a374773ec96,
         type: 3}
       propertyPath: m_Name
-      value: StartRom
+      value: StartRoom
       objectReference: {fileID: 0}
     - target: {fileID: 3647074135810749122, guid: 6eb1569800d7b434e9399a374773ec96,
         type: 3}
@@ -2451,7 +2443,7 @@ MonoBehaviour:
     type: 3}
   _startSpawnPoint: {fileID: 1599843697}
   _precreatedRoom:
-  - {fileID: 972031002}
+  - {fileID: 1662102003}
   _seedIsRandom: 1
   _runInStart: 1
 --- !u!4 &1599843697
@@ -2491,6 +2483,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1090730367}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1662102003 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1398955086982648177, guid: 6eb1569800d7b434e9399a374773ec96,
+    type: 3}
+  m_PrefabInstance: {fileID: 1090730367}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662102000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c67540965e55744194b74f89fe469e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1668003645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2770,7 +2774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _joystick: {fileID: 849244543}
-  _physicsMovement: {fileID: 0}
+  _movement: {fileID: 0}
 --- !u!1 &1902435848
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,10 @@ public class TileSurfaceBaker : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        BuildSurfaceClientRpc();
+        if (IsServer)
+        {
+            BuildSurfaceClientRpc();
+        }
     }
 
     [ClientRpc]

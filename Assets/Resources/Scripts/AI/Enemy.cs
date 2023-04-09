@@ -20,13 +20,13 @@ public class Enemy : Health
 
     private void Awake()
     {
-        OnDeath.AddListener(() => Destroy(gameObject));
+        OnDeath.AddListener(() => DestroyServerRpc());
     }
 
     public void SetTargetDetecter(IncomingAndOutgoingWatcher detecter)
     {
         detecter.enterEvent.AddListener(
-            (Health player) => playerEvent?.Invoke(player));
+            delegate(Health player) { playerEvent?.Invoke(player); });
     }
 
     public override void TakeDamage(int damage)
@@ -36,26 +36,25 @@ public class Enemy : Health
             Debug.LogError("Invalid damage value");
             return;
         }
-        if (IsServer)
+        if (IsOwner)
         {
             _health -= damage;
+            _damageEvent?.Invoke(damage);
             if (_health <= 0)
             {
                 _deadEvent?.Invoke();
-                Destroy(gameObject);
             }
-            TakeDamageClientRpc(damage);
         }
     }
 
-    [ClientRpc]
-    private void TakeDamageClientRpc(int damage)
+    [ServerRpc]
+    private void DestroyServerRpc()
     {
-        OnHit?.Invoke(damage);
+        Destroy(gameObject);
     }
 
     public override void Heal(int amount)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }

@@ -3,14 +3,11 @@ using UnityEngine;
 
 public class PlayersTeleporterToRoom : MonoBehaviour
 {
-    [SerializeField] private PlayerRegister _playersRegister;
+    [SerializeField] private PlayerObjectsRegister _playersRegister;
 
     private void Awake()
     {
-        if (NetworkManager.Singleton.IsServer)
-        {
-            _playersRegister.registerEvent.AddListener(OnPlayerRigistered);
-        }
+        _playersRegister.registerEvent.AddListener(OnPlayerRigistered);
     }
 
     private void OnPlayerRigistered(NetworkObject player)
@@ -18,11 +15,11 @@ public class PlayersTeleporterToRoom : MonoBehaviour
         if (player.TryGetComponent(out RoomMover roomMover))
         {
             roomMover.enterEvent.AddListener(
-                delegate(Room room) { TeleportPlayers(player, room); });
+                delegate(Room room) { TeleportPlayers(player); });
         }
     }
 
-    private void TeleportPlayers(NetworkObject playerToTeleport, Room room)
+    private void TeleportPlayers(NetworkObject playerToTeleport)
     {
         foreach (NetworkObject player in _playersRegister.Players)
         {

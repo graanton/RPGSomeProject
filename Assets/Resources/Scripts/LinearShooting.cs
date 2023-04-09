@@ -1,11 +1,12 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class LinearShooting : MonoBehaviour
+public class LinearShooting : NetworkBehaviour
 {
     [SerializeField] private Projectile _projectilePrefab;
     [SerializeField] private Transform _attackPoint;
     [SerializeField] private float _fireRate = 1;
+    [SerializeField] private NetworkObject _owner;
 
     private float _lastShootTime;
 
@@ -13,16 +14,20 @@ public class LinearShooting : MonoBehaviour
     {
         if (Time.time - _lastShootTime > _fireRate)
         {
-            var newProjectile = Instantiate(_projectilePrefab,
-            _attackPoint.position, _attackPoint.rotation);
-            newProjectile.SetOwner(gameObject);
-            newProjectile.direction = _attackPoint.forward;
-            
-            NetworkObject networkedProjectile = newProjectile.GetComponent<NetworkObject>();
-            networkedProjectile.Spawn(true);
-
-            _lastShootTime = Time.time;
+            ShootServerRpc(OwnerClientId, _owner.NetworkObjectId);
         }
-        
+    }
+
+    [ServerRpc]
+    private void ShootServerRpc(ulong clientId, ulong ownerId)
+    {
+        var newProjectile = Instantiate(_projectilePrefab,
+            _attackPoint.position, _attackPoint.rotation);
+        newProjectile.SetOwnerNetworkObjectId(ownerId);
+
+        var networkedProjectile = newProjectile.GetComponent<NetworkObject>();
+        networkedProjectile.SpawnAsPlayerObject(clientId, true);
+
+        _lastShootTime = Time.time;
     }
 }

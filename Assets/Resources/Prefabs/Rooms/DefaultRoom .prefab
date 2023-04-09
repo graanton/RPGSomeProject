@@ -99,6 +99,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _enemiesSpawner: {fileID: 8317007280267681083}
+  _incomingAndOutgoingWatcher: {fileID: 3144332282218126775}
 --- !u!114 &-291169096377505678
 MonoBehaviour:
   m_ObjectHideFlags: 0

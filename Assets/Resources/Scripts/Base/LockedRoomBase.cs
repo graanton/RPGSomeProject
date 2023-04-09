@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,12 +8,25 @@ public abstract class LockedRoomBase: Room
     public UnityEvent LockEvent = new();
 
     public abstract bool IsLocked();
-    public void Lock()
+    public virtual void Lock()
     {
-        LockEvent?.Invoke();
+        CloseClientRpc();
     }
-    public void Open()
+
+    public virtual void Open()
+    {
+        OpenClientRpc();
+    }
+
+    [ClientRpc]
+    private void OpenClientRpc()
     {
         OpenEvent?.Invoke();
+    }
+
+    [ClientRpc]
+    private void CloseClientRpc()
+    {
+        LockEvent?.Invoke();
     }
 }

@@ -12,7 +12,7 @@ public class Room : NetworkBehaviour, IBoundsCorrectble
 
     public RoomEvent HallwayAddEvent = new();
 
-    public RectInt localBounds => _bounds;
+    public RectInt LocalBounds => _bounds;
 
     public void TilesRectToLocalZeroPosition()
     {
@@ -81,7 +81,7 @@ public class Room : NetworkBehaviour, IBoundsCorrectble
 
     public void MoveBoundsPosition(Vector2Int newPosition)
     {
-        _bounds = new RectInt(newPosition, localBounds.size);
+        _bounds = new RectInt(newPosition, LocalBounds.size);
     }
 
     private Vector2Int TransformToCellPosition2D(Transform target)
@@ -96,9 +96,9 @@ public class Room : NetworkBehaviour, IBoundsCorrectble
 
     public bool OnTheBuffer(RectInt other)
     {
-        return localBounds.Overlaps(other) == false &&
-            new RectInt(localBounds.position - Vector2Int.one,
-            localBounds.size + Vector2Int.one * 2).Overlaps(other);
+        return LocalBounds.Overlaps(other) == false &&
+            new RectInt(LocalBounds.position - Vector2Int.one,
+            LocalBounds.size + Vector2Int.one * 2).Overlaps(other);
     }
 }
 
@@ -106,7 +106,7 @@ public class Room : NetworkBehaviour, IBoundsCorrectble
 public class RoomEvent: UnityEvent<Room> { }
 public interface IBoundsCorrectble
 {
-    public RectInt localBounds { get; }
+    public RectInt LocalBounds { get; }
     public void MoveBoundsPosition(Vector2Int newPosition);
     public void CorrectPosition();
     public void BoundsInit();

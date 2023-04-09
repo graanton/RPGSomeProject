@@ -12,11 +12,11 @@ public class Projectile : NetworkBehaviour
     [SerializeField] private LayerMask _targetsLayer;
     [SerializeField] private LayerMask _obstaclesLayer;
     [SerializeField] private int _damage;
-
-    public Vector3 direction;
+    
     public HitEvent hitEvent = new();
 
-    private GameObject _owner;
+    private Vector3 _direction;
+    private NetworkObject _owner;
     private Rigidbody _rigidbody;
 
     private void Awake()
@@ -24,37 +24,45 @@ public class Projectile : NetworkBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    public void SetOwner(GameObject owner)
+    public void SetOwnerNetworkObjectId(ulong id)
     {
-        _owner = owner;
+        _owner = GetNetworkObject(id);
     }
 
     private void Update()
     {
         if (IsOwner)
         {
-            _rigidbody.velocity = direction.normalized * _speed;
+            _rigidbody.velocity = _direction.normalized * _speed;
         }
     }
 
     public override void OnNetworkSpawn()
     {
-        Destroy(gameObject, _maxLifeTime);
+        if (IsServer)
+        {
+            Destroy(gameObject, _maxLifeTime);
+        }
+        if (IsOwner)
+        {
+            _direction = transform.forward;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject != _owner)
+        if (other.TryGetComponent(out NetworkObject target) &&
+            target != _owner)
         {
-            if (IsLayerInMask(other.gameObject.layer, _obstaclesLayer))
-            {
-                Destroy(gameObject);
-            }
             if (IsLayerInMask(other.gameObject.layer, _targetsLayer) &&
                 other.TryGetComponent(out Health damageClaimer))
             {
                 damageClaimer.TakeDamage(_damage);
                 hitEvent?.Invoke(damageClaimer);
+            }
+            if (IsLayerInMask(other.gameObject.layer, _obstaclesLayer))
+            {
+                Destroy(gameObject);
             }
         }
     }

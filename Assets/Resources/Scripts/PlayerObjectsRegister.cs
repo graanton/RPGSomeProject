@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerRegister : MonoBehaviour
+public class PlayerObjectsRegister : MonoBehaviour
 {
     public PlayerRegisterEvent registerEvent = new();
     public IReadOnlyCollection<NetworkObject> Players => _players;

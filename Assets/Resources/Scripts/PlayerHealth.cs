@@ -14,17 +14,15 @@ public class PlayerHealth : Health
     public override int CurrentHealth => _health;
 
     public override UnityEvent OnDeath => _deadEvent;
-
     public override DamageEvent OnHit => _hitEvent;
-
-    
 
     public override void OnNetworkSpawn()
     {
-        _deadEvent.AddListener(OnDie);
+        _deadEvent.AddListener(DestroyServerRpc);
     }
 
-    private void OnDie()
+    [ServerRpc]
+    private void DestroyServerRpc()
     {
         Destroy(gameObject);
     }
@@ -37,20 +35,14 @@ public class PlayerHealth : Health
             return;
         }
 
-        if (IsServer)
+        if (IsOwner)
         {
-            HitClientRpc(damage);
-        }
-    }
-
-    [ClientRpc]
-    private void HitClientRpc(int damage)
-    {
-        _health -= damage;
-        _hitEvent?.Invoke(damage);
-        if (_health <= 0)
-        {
-            _deadEvent?.Invoke();
+            _health -= damage;
+            _hitEvent?.Invoke(damage);
+            if (_health <= 0)
+            {
+                _deadEvent?.Invoke();
+            }
         }
     }
 

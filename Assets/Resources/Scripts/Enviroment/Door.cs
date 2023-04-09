@@ -6,42 +6,45 @@ using UnityEngine.Events;
 public class Door : Tile3dBase
 {
     [SerializeField] private LockedRoomBase _room;
-    [SerializeField] private IncomingAndOutgoingWatcher _targetWaiter;
-
-    private bool _hasNeighbore = false;
 
     public UnityEvent openEvent = new();
     public UnityEvent closeEvent = new();
 
-    public void Awake()
+    private NetworkVariable<bool> _hasNeighbore = new(false);
+
+    private void Awake()
     {
-        _room.HallwayAddEvent.AddListener(OnNeighboreAdded);
-        _targetWaiter.enterEvent.AddListener(OnPlayerEnter);
-        Close();
         BoundsInit();
-        _room.OpenEvent.AddListener(OnRoomOpened);
+        _room.HallwayAddEvent.AddListener(OnNeighboreAdded);
+        _room.OpenEvent.AddListener(Open);
+        _room.LockEvent.AddListener(Close);
     }
 
-    private void OnRoomOpened()
+    public override void OnNetworkSpawn()
     {
-        Open();
-    }
-
-    private void OnPlayerEnter(Health player)
-    {
-        Close();
+        if (IsClient)
+        {
+            if (_room.IsLocked())
+            {
+                Close();
+            }
+            else
+            {
+                Open();
+            }
+        }
     }
 
     private void OnNeighboreAdded(Room neighbore)
     {
-        bool isMyNeighbore = neighbore.OnTheBuffer(localBounds)
+        bool isMyNeighbore = neighbore.OnTheBuffer(LocalBounds)
              &&
-            Vector2Int.Distance(localBounds.position,
-            neighbore.localBounds.position) == 1;
+            Vector2Int.Distance(LocalBounds.position,
+            neighbore.LocalBounds.position) == 1;
 
         if (isMyNeighbore)
         {
-            _hasNeighbore = true;
+            _hasNeighbore.Value = true;
             Open();
         }
     }
@@ -53,9 +56,7 @@ public class Door : Tile3dBase
 
     public void Open()
     {
-        if (_hasNeighbore)
-        {
+        if (_hasNeighbore.Value)
             openEvent?.Invoke();
-        }
     }
 }

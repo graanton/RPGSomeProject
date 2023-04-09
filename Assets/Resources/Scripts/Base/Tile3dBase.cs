@@ -1,13 +1,13 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
-public class Tile3dBase : MonoBehaviour, IBoundsCorrectble
+public class Tile3dBase : NetworkBehaviour, IBoundsCorrectble
 {
     [SerializeField] private Vector2Int _boundsPosition;
     [SerializeField] private Tilemap _tilemap;
 
-    public RectInt localBounds => new RectInt(_boundsPosition, Vector2Int.one);
+    public RectInt LocalBounds => new RectInt(_boundsPosition, Vector2Int.one);
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class Tile3dBase : MonoBehaviour, IBoundsCorrectble
 
     public virtual void CorrectPosition()
     {
-        transform.position = AxisConverter.XYToXZInt(localBounds.position);
+        transform.position = AxisConverter.XYToXZInt(LocalBounds.position);
     }
 
     public virtual void MoveBoundsPosition(Vector2Int newPosition)

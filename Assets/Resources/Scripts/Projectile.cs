@@ -51,19 +51,15 @@ public class Projectile : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out NetworkObject target) &&
-            target != _owner)
-        {
-            if (IsLayerInMask(other.gameObject.layer, _targetsLayer) &&
+        if (IsLayerInMask(other.gameObject.layer, _targetsLayer) &&
                 other.TryGetComponent(out Health damageClaimer))
-            {
-                damageClaimer.TakeDamage(_damage);
-                hitEvent?.Invoke(damageClaimer);
-            }
-            if (IsLayerInMask(other.gameObject.layer, _obstaclesLayer))
-            {
-                Destroy(gameObject);
-            }
+        {
+            damageClaimer.TakeDamage(_damage);
+            hitEvent?.Invoke(damageClaimer);
+        }
+        if (IsLayerInMask(other.gameObject.layer, _obstaclesLayer))
+        {
+            Destroy(gameObject);
         }
     }
 

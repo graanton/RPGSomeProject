@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayersTeleporterToRoom : MonoBehaviour
 {
-    [SerializeField] private PlayerObjectsRegister _playersRegister;
+    [SerializeField] private SpawnedPlayersRegister _playersRegister;
 
     private void Awake()
     {

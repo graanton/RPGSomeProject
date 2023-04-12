@@ -4,12 +4,19 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerObjectsRegister : MonoBehaviour
+public class SpawnedPlayersRegister : MonoBehaviour
 {
+    [SerializeField] private PlayerSpawner _spawner;
+
     public PlayerRegisterEvent registerEvent = new();
     public IReadOnlyCollection<NetworkObject> Players => _players;
 
     private List<NetworkObject> _players = new();
+
+    private void Awake()
+    {
+        _spawner.playerSpawnEvent.AddListener(RegisterPlayer);
+    }
 
     public void RegisterPlayer(NetworkObject player)
     {

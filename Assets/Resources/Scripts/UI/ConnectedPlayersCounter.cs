@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class ConnectedPlayersCounter : MonoBehaviour
 {
-    [SerializeField] private PlayerObjectsRegister _register;
+    [SerializeField] private SpawnedPlayersRegister _register;
 
     public CountEvent CountEvent = new CountEvent();
 

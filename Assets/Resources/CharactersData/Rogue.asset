@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5789407be3127f247a3d256e518a0f4c, type: 3}
   m_Name: Rogue
   m_EditorClassIdentifier: 
-  _characterPrefab: {fileID: 5948464067257890202, guid: ae420d4358a52744dbd100014de0f50b,
+  _characterPrefab: {fileID: 7867422557036436626, guid: ae420d4358a52744dbd100014de0f50b,
     type: 3}
   _unlockCharacterRender: {fileID: -8679921383154817045, guid: 205f64b316ccea74692236f4046888a9,
     type: 3}

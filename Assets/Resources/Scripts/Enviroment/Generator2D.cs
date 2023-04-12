@@ -81,7 +81,6 @@ public class Generator2D : NetworkBehaviour
             {
                 currentRoom = _roomsPool.GetRandomWeightedObject().obj;
             }
-            
 
             Vector2Int location = new Vector2Int(_random.Next(0, _size.x), _random.Next(0, _size.y));
             Vector2Int roomSize = currentRoom.LocalBounds.size;

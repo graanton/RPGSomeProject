@@ -13,8 +13,8 @@ public class PlayerHealth : Health
     public override int MaxHealth => _maxHealth;
     public override int CurrentHealth => _health;
 
-    public override UnityEvent OnDeath => _deadEvent;
-    public override DamageEvent OnHit => _hitEvent;
+    public override UnityEvent DeathEvent => _deadEvent;
+    public override DamageEvent HitEvent => _hitEvent;
     public DamageEvent InvulnerableHitEvent = new();
 
     private float _invulnerableTime;

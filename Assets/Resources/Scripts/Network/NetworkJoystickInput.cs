@@ -11,7 +11,7 @@ public class NetworkJoystickInput : NetworkBehaviour
     {
         if (target.IsOwner && target.TryGetComponent(out _movement))
         {
-            Debug.Log("Sucessful set");
+            
         }
     }
 

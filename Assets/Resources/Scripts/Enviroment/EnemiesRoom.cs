@@ -26,7 +26,7 @@ public class EnemiesRoom : LockedRoomBase
     private void OnEnemySpawend(Enemy enemy)
     {
         _enemiesCount++;
-        enemy.OnDeath.AddListener(OnEnemyDead);
+        enemy.DeathEvent.AddListener(OnEnemyDead);
     }
 
     private void OnEnemyDead()

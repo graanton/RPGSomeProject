@@ -11,14 +11,22 @@ public class JerkButton : MonoBehaviour
 
     public void SetTarget(NetworkObject target)
     {
-        _jerkble = target.GetComponent<Jerkble>();
-        _button.onClick.AddListener(_jerkble.Jerk);
+        if (target.TryGetComponent(out Jerkble jerkble))
+        {
+            _jerkble = jerkble;
+            _button.onClick.AddListener(_jerkble.Jerk);
+        }
+        else
+        {
+            Debug.LogWarning("Missing Jerkble component");
+            return;
+        }
     }
 
     private void Start()
     {
         _button = GetComponent<Button>();
-        if (_jerkble != null )
+        if (_jerkble != null)
         {
             _button.onClick.AddListener(_jerkble.Jerk);
         }

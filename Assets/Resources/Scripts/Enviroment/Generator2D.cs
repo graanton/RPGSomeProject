@@ -1,4 +1,5 @@
 ﻿using Graphs;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -23,7 +24,7 @@ public class Generator2D : NetworkBehaviour
     [SerializeField] private Hallway _hallwayBorderPrefab;
     [SerializeField] private Transform _startSpawnPoint;
     [SerializeField] private List<Room> _precreatedRoom;
-
+    [SerializeField] private int _borderLength = 1;
     [Space]
     [SerializeField] private bool _seedIsRandom, _runInStart;
 
@@ -39,7 +40,7 @@ public class Generator2D : NetworkBehaviour
     {
         if (IsServer && _runInStart)
         {
-            Generate();
+            StartCoroutine(Generate());
         }
     }
 
@@ -50,8 +51,9 @@ public class Generator2D : NetworkBehaviour
         _rooms = new List<Room>();
     }
 
-    private void Generate()
+    private IEnumerator Generate()
     {
+        yield return null;  
         if (_seedIsRandom)
         {
             _seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
@@ -63,6 +65,7 @@ public class Generator2D : NetworkBehaviour
         CreateHallways();
         PathfindHallways();
         CreateHallwaysBorder();
+        FillGrid();
     }
 
     private void PlaceRooms()
@@ -82,27 +85,12 @@ public class Generator2D : NetworkBehaviour
                 currentRoom = _roomsPool.GetRandomWeightedObject().obj;
             }
 
-            Vector2Int location = new Vector2Int(_random.Next(0, _size.x), _random.Next(0, _size.y));
+            Vector2Int location = new Vector2Int(_random.Next(_borderLength, _size.x), _random.Next(0, _size.y));
             Vector2Int roomSize = currentRoom.LocalBounds.size;
 
-            bool add = true;
             RectInt newRoom = new RectInt(location, roomSize);
-            RectInt buffer = new RectInt(location + new Vector2Int(-1, -1), roomSize + new Vector2Int(2, 2));
 
-            foreach (var room in _rooms)
-            {
-                if (room.LocalBounds.Overlaps(buffer))
-                {
-                    add = false;
-                    break;
-                }
-            }
-
-            if (newRoom.xMin < 0 || newRoom.xMax >= _size.x
-                || newRoom.yMin < 0 || newRoom.yMax >= _size.y)
-            {
-                add = false;
-            }
+            bool add = CanPlaceRoom(newRoom);
 
             if (add)
             {
@@ -175,7 +163,6 @@ public class Generator2D : NetworkBehaviour
             if (_grid[point] == CellType.None)
             {
                 PlaceHalway(_hallwayBorderPrefab, point);
-                _grid[point] = CellType.Hallway;
             }
         }
     }
@@ -257,6 +244,34 @@ public class Generator2D : NetworkBehaviour
         }
     }
 
+    private void FillGrid()
+    {
+        for (int x = _borderLength; x < _grid.Size.x - _borderLength; x++)
+        {
+            for (int y = _borderLength; y < _grid.Size.y - _borderLength; y++)
+            {
+                Vector2Int hallwayPoint = new Vector2Int(x, y);
+                if (_grid[hallwayPoint] == CellType.None)
+                {
+                    PlaceHalway(_hallwayPrefab, hallwayPoint);
+                }
+            }
+        }
+
+        HashSet<Vector2Int> borderPoints = new();
+        RectInt filledGrid = new RectInt(Vector2Int.one, _grid.Size - Vector2Int.one * 2);
+        foreach (Vector2Int point in
+            new RectInt(Vector2Int.zero, _grid.Size).allPositionsWithin)
+        {
+            if (filledGrid.Contains(point) == false)
+                borderPoints.Add(point);
+        }
+        foreach(Vector2Int point in borderPoints)
+        {
+            PlaceHalway(_hallwayBorderPrefab, point);
+        }
+    }
+
     private Room PlaceRoom(Room room, Vector2Int position)
     {
         Vector3 placePosition = _startSpawnPoint.position +
@@ -284,6 +299,7 @@ public class Generator2D : NetworkBehaviour
 
     private Hallway PlaceHalway(Hallway hallway, Vector2Int position)
     {
+        _grid[position] = CellType.Hallway;
         Vector3 placePosition = _startSpawnPoint.position +
             _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
         Hallway spawnedHallway = Instantiate(hallway, placePosition, _startSpawnPoint.rotation);
@@ -303,7 +319,7 @@ public class Generator2D : NetworkBehaviour
         {
             Vector2Int randomPoint = new Vector2Int(_random.Next(0, _grid.Size.x - 1), _random.Next(0, _grid.Size.y - 1));
             Vector2Int roomSize = room.LocalBounds.size;
-            if (CanRoomPlace(new RectInt(randomPoint, roomSize)))
+            if (CanPlaceRoom(new RectInt(randomPoint, roomSize)))
             {
                 placePositions.Add(randomPoint);
             }
@@ -316,7 +332,7 @@ public class Generator2D : NetworkBehaviour
             {
                 for (int y = 0; x < _grid.Size.y; y += step.y)
                 {
-                    if (!CanRoomPlace(new RectInt(x, y, room.LocalBounds.width, room.LocalBounds.height))) { continue; }
+                    if (!CanPlaceRoom(new RectInt(x, y, room.LocalBounds.width, room.LocalBounds.height))) { continue; }
                     placePositions.Add(new Vector2Int(x, y));
                 }
             }
@@ -330,20 +346,25 @@ public class Generator2D : NetworkBehaviour
         return placedRoom;
     }
 
-    private bool CanRoomPlace(RectInt roomData)
+    private bool CanPlaceRoom(RectInt roomData)
     {
-        bool anyIntersected = false;
-        foreach (Room currentRoom in _rooms)
+        bool overlapGridBounds = roomData.xMax > _grid.Size.x - _borderLength ||
+            roomData.yMax > _grid.Size.y - _borderLength ||
+            roomData.position.x < _borderLength || roomData.position.y < _borderLength;
+
+        if (overlapGridBounds)
         {
-            if (currentRoom.LocalBounds.Overlaps(roomData))
+            return false;
+        }
+
+        foreach (Vector2Int point in roomData.allPositionsWithin)
+        {
+            if (_grid[point] != CellType.None)
             {
-                anyIntersected = true;
-                break;
+                return false;
             }
         }
-        bool canPlace = !(roomData.xMax > _grid.Size.x || roomData.yMax + roomData.height > _grid.Size.y ||
-            anyIntersected);
 
-        return canPlace;
+        return true;
     }
 }

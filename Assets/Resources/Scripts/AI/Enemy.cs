@@ -13,20 +13,20 @@ public class Enemy : Health
 
     public HealthEvent playerEvent = new();
 
-    public override UnityEvent OnDeath => _deadEvent;
-    public override DamageEvent OnHit => _damageEvent;
+    public override UnityEvent DeathEvent => _deadEvent;
+    public override DamageEvent HitEvent => _damageEvent;
     public override int CurrentHealth => _health;
     public override int MaxHealth => _maxHealth;
 
     private void Awake()
     {
-        OnDeath.AddListener(() => DestroyServerRpc());
+        DeathEvent.AddListener(() => DestroyServerRpc());
     }
 
     public void SetTargetDetecter(IncomingAndOutgoingWatcher detecter)
     {
         detecter.enterEvent.AddListener(
-            delegate(Health player) { playerEvent?.Invoke(player); });
+            (Health player) => playerEvent?.Invoke(player));
     }
 
     public override void TakeDamage(int damage)

@@ -4,8 +4,8 @@ using UnityEngine.Events;
 
 public abstract class Health : NetworkBehaviour
 {
-    public abstract UnityEvent OnDeath { get; }
-    public abstract DamageEvent OnHit { get; }
+    public abstract UnityEvent DeathEvent { get; }
+    public abstract DamageEvent HitEvent { get; }
 
     public abstract int CurrentHealth { get; }
     public abstract int MaxHealth { get; }

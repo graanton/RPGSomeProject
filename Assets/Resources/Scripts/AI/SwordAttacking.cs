@@ -10,7 +10,7 @@ public class SwordAttack : NetworkBehaviour
     [SerializeField] private LayerMask _attackMask;
     [SerializeField] private float _attackDelay = 0.5f;
 
-    public UnityEvent onAttack = new();
+    public UnityEvent AttackEvent = new();
 
     private float _lastAttackTime = 0f;
 
@@ -36,7 +36,7 @@ public class SwordAttack : NetworkBehaviour
             return;
         }
 
-        onAttack.Invoke();
+        AttackEvent?.Invoke();
 
         var targets = Physics.OverlapSphere(_attackPoint.position,
             _data.Length + _data.Width, _attackMask);

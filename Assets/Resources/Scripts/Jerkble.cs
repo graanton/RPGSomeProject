@@ -1,22 +1,36 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Jerkble : MonoBehaviour
 {
     [SerializeField] private AnimationCurve _distance;
 
+    public UnityEvent StartJerkEvent = new();
+    public UnityEvent StopJerkEvent = new();
+
     private Rigidbody _rigidbody;
+    private bool _isJerking = false;
 
     private void Start()
     {
+        StartJerkEvent.AddListener(() => _isJerking = true);
+        StopJerkEvent.AddListener(() => _isJerking = false);
         _rigidbody = GetComponent<Rigidbody>();
     }
 
     public void Jerk()
     {
-        print("dash");
-        StartCoroutine(Jerking(transform.forward));
+        if (_isJerking)
+        {
+            Debug.LogWarning("Is jerking");
+            return;
+        }
+        else
+        {
+            StartCoroutine(Jerking(transform.forward));
+        }
     }
 
     private IEnumerator Jerking(Vector3 direction)
@@ -25,19 +39,16 @@ public class Jerkble : MonoBehaviour
         float endTime = startTime +
             _distance.keys[_distance.keys.Length - 1].time;
         float currentTime = startTime;
-        Vector3 currentDirection = Vector3.zero;
-        Vector3 previousPosition = currentDirection;
-
-        while (currentTime < endTime)
+        StartJerkEvent?.Invoke();
+        while (currentTime <= endTime)
         {
-            currentDirection = direction *
-                _distance.Evaluate(currentTime - startTime) -
-                previousPosition;
-
+            float distanceToMove = _distance.Evaluate(currentTime - startTime) -
+            _distance.Evaluate(currentTime - startTime - Time.deltaTime);
+            Vector3 currentDirection = direction * distanceToMove;
             _rigidbody.MovePosition(_rigidbody.position + currentDirection);
-            yield return new WaitForEndOfFrame();
             currentTime += Time.deltaTime;
-            previousPosition = currentDirection;
+            yield return new WaitForEndOfFrame();
         }
+        StopJerkEvent?.Invoke();
     }
 }

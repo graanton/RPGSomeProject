@@ -343,17 +343,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
+      inSlope: 6.6666665
+      outSlope: 6.6666665
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
+      time: 0.3
+      value: 2
+      inSlope: 6.6666665
+      outSlope: 6.6666665
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -361,6 +361,24 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  StartJerkEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3195881054069102031}
+        m_TargetAssemblyTypeName: PlayerHealth, Assembly-CSharp
+        m_MethodName: BecomeInvulnerable
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
+  StopJerkEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1775035539685892640
 PrefabInstance:
   m_ObjectHideFlags: 0

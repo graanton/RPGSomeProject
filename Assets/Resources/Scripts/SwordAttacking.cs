@@ -9,6 +9,7 @@ public class SwordAttack : NetworkBehaviour
     [SerializeField] private Transform _attackPoint;
     [SerializeField] private LayerMask _attackMask;
     [SerializeField] private float _attackDelay = 0.5f;
+    [SerializeField] private bool _autoAttack = true;
 
     public UnityEvent AttackEvent = new();
 
@@ -16,15 +17,18 @@ public class SwordAttack : NetworkBehaviour
 
     private void Update()
     {
-        bool haveTargets = Physics.OverlapSphereNonAlloc(_attackPoint.position,
-            _data.Length + _data.Width, new Collider[1], _attackMask) > 0;
-        if (haveTargets)
+        if (_autoAttack)
         {
-            AttackInFront();
+            bool haveTargets = Physics.OverlapSphereNonAlloc(_attackPoint.position,
+            _data.Length + _data.Width, new Collider[1], _attackMask) > 0;
+            if (haveTargets)
+            {
+                AttackInFront();
+            }
         }
     }
 
-    private void AttackInFront()
+    public void AttackInFront()
     {
         if (!IsOwner)
         {

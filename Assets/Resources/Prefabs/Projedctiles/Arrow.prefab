@@ -170,9 +170,8 @@ MonoBehaviour:
     m_Bits: 128
   _obstaclesLayer:
     serializedVersion: 2
-    m_Bits: 256
-  _damage: 999
-  direction: {x: 0, y: 0, z: 0}
+    m_Bits: 384
+  _damage: 35
   hitEvent:
     m_PersistentCalls:
       m_Calls: []

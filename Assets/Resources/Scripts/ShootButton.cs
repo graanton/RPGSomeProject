@@ -11,7 +11,7 @@ public class ShootButton : MonoBehaviour, IPointerDownHandler
 
     private void Awake()
     {
-        _targetSpawner.playerSpawnEvent.AddListener(OnPlayerSpawned);
+        _targetSpawner.PlayerSpawnEvent.AddListener(OnPlayerSpawned);
     }
 
     private void OnPlayerSpawned(NetworkObject player)

@@ -15,7 +15,7 @@ public class SpawnedPlayersRegister : MonoBehaviour
 
     private void Awake()
     {
-        _spawner.playerSpawnEvent.AddListener(RegisterPlayer);
+        _spawner.PlayerSpawnEvent.AddListener(RegisterPlayer);
     }
 
     public void RegisterPlayer(NetworkObject player)

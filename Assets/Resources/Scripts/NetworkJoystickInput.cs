@@ -1,18 +1,20 @@
 using UnityEngine;
 using Unity.Netcode;
 
-[RequireComponent(typeof(NetworkObject))]
-public class NetworkJoystickInput : NetworkBehaviour
+public class NetworkJoystickInput : MonoBehaviour
 {
     [SerializeField] private Joystick _joystick;
+    [SerializeField] private PlayerSpawner _spawner;
     [SerializeField] private Movement _movement;
 
-    public void SetTarget(NetworkObject target)
+    private void Awake()
     {
-        if (target.IsOwner && target.TryGetComponent(out _movement))
-        {
-            
-        }
+        _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
+    }
+
+    private void OnSpawn(NetworkObject player)
+    {
+        player.TryGetComponent(out _movement);
     }
 
     private void Update()

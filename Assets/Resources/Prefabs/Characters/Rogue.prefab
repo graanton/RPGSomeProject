@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 4750124361257137020}
   - component: {fileID: 2806541146574681361}
   - component: {fileID: 4589471282114853436}
+  - component: {fileID: 1620762945367219158}
   m_Layer: 6
   m_Name: Rogue
   m_TagString: Untagged
@@ -220,7 +221,7 @@ MonoBehaviour:
   _moveEvent:
     m_PersistentCalls:
       m_Calls: []
-  _speed: 7
+  _speed: 4
 --- !u!114 &8970028381042685010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,6 +380,19 @@ MonoBehaviour:
   StopJerkEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1620762945367219158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867422557036436626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22f7d0810a7a404ab2b06c401c113f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ammount: 1
 --- !u!1001 &1775035539685892640
 PrefabInstance:
   m_ObjectHideFlags: 0

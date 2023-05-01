@@ -10,7 +10,7 @@ public class PlayerSpawner : NetworkBehaviour, ISceneLoadHandler<int>
     [SerializeField] private int _characterIndex;
     [SerializeField] private CharacterDatabase _characterDatabase;
 
-    public NetworkSpawnEvent playerSpawnEvent = new();
+    public NetworkSpawnEvent PlayerSpawnEvent = new();
 
     private void SpawnPlayer(ulong playerId, int characterIndex)
     {
@@ -28,7 +28,7 @@ public class PlayerSpawner : NetworkBehaviour, ISceneLoadHandler<int>
     [ClientRpc]
     private void ClientsSpawnInvokeClientRpc(ulong objectId)
     {
-        playerSpawnEvent?.Invoke(GetNetworkObject(objectId));
+        PlayerSpawnEvent?.Invoke(GetNetworkObject(objectId));
     }
 
     public void OnSceneLoaded(int characterIndex)

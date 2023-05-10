@@ -6,10 +6,16 @@ using UnityEngine.UI;
 public class JerkButton : MonoBehaviour
 {
     [SerializeField] private Jerkble _jerkble;
+    [SerializeField] private PlayerSpawner _playerSpawner;
 
     private Button _button;
 
-    public void SetTarget(NetworkObject target)
+    private void Awake()
+    {
+        _playerSpawner.PlayerSpawnEvent.AddListener(SetTarget);
+    }
+
+    private void SetTarget(NetworkObject target)
     {
         if (target.TryGetComponent(out Jerkble jerkble))
         {

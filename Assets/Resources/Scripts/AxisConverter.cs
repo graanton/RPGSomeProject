@@ -13,4 +13,9 @@ public static class AxisConverter
     {
         return new Vector3(xyVector.x, 0, xyVector.y);
     }
+
+    public static Vector3 XYZToXZ(Vector3 vector)
+    {
+        return new Vector3(vector.x, 0, vector.z);
+    }
 }

@@ -116,6 +116,8 @@ GameObject:
   - component: {fileID: 2806541146574681361}
   - component: {fileID: 4589471282114853436}
   - component: {fileID: 1620762945367219158}
+  - component: {fileID: 5854743400936739951}
+  - component: {fileID: 3240371442344092502}
   m_Layer: 6
   m_Name: Rogue
   m_TagString: Untagged
@@ -393,6 +395,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ammount: 1
+--- !u!114 &5854743400936739951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867422557036436626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92e823ac9e7cfb84b90d2301768b5b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roomMover: {fileID: 4022079884794708584}
+--- !u!114 &3240371442344092502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867422557036436626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fe58a00a3098e0419f3a763e864925e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _detecter: {fileID: 5854743400936739951}
 --- !u!1001 &1775035539685892640
 PrefabInstance:
   m_ObjectHideFlags: 0

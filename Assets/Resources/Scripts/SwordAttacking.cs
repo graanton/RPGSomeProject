@@ -1,9 +1,8 @@
-using System.Globalization;
 using UnityEngine;
 using UnityEngine.Events;
 using Unity.Netcode;
 
-public class SwordAttack : NetworkBehaviour
+public class SwordAttack : NetworkBehaviour, IAttack
 {
     [SerializeField] private SwordData _data;
     [SerializeField] private Transform _attackPoint;
@@ -32,6 +31,7 @@ public class SwordAttack : NetworkBehaviour
     {
         if (!IsOwner)
         {
+            Debug.LogWarning("Only owner can Attack");
             return;
         }
 
@@ -54,5 +54,15 @@ public class SwordAttack : NetworkBehaviour
         }
 
         _lastAttackTime = Time.time;
+    }
+
+    public void StartAttacking()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void StopAttacking()
+    {
+        throw new System.NotImplementedException();
     }
 }

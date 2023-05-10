@@ -14,8 +14,10 @@ public class HealthBar : MonoBehaviour
     {
         if (_health != null)
         {
+            UpdateHealthBar();
             _health.HitEvent.AddListener(OnHit);
         }
+        _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
     }
 
     private void OnHit(int damage)
@@ -23,7 +25,7 @@ public class HealthBar : MonoBehaviour
         UpdateHealthBar();
     }
 
-    public void SetTarget(NetworkObject target)
+    private void OnSpawn(NetworkObject target)
     {
         _health = target.GetComponent<Health>();
         Awake();

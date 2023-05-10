@@ -3,11 +3,11 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ShootButton : MonoBehaviour, IPointerDownHandler
+public class ShootButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private PlayerSpawner _targetSpawner;
 
-    private LinearShooting _shooting;
+    private IAttack _attack;
 
     private void Awake()
     {
@@ -16,11 +16,16 @@ public class ShootButton : MonoBehaviour, IPointerDownHandler
 
     private void OnPlayerSpawned(NetworkObject player)
     {
-        _shooting = player.GetComponent<LinearShooting>();
+        _attack = player.GetComponent<IAttack>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _shooting.Shoot();
+        _attack.StartAttacking();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _attack.StopAttacking();
     }
 }

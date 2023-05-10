@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,7 +9,10 @@ public class EnemiesRoom : LockedRoomBase
     [SerializeField] private IncomingAndOutgoingWatcher _incomingAndOutgoingWatcher;
 
     private int _enemiesCount = 0;
+    private List<Enemy> _enemies= new List<Enemy>();
     private bool _isLocked = false;
+
+    public IReadOnlyCollection<Enemy> Enemies => _enemies;
 
     public void Awake()
     {
@@ -25,12 +29,14 @@ public class EnemiesRoom : LockedRoomBase
 
     private void OnEnemySpawend(Enemy enemy)
     {
+        _enemies.Add(enemy);
         _enemiesCount++;
-        enemy.DeathEvent.AddListener(OnEnemyDead);
+        enemy.DeathEvent.AddListener(() => OnEnemyDead(enemy));
     }
 
-    private void OnEnemyDead()
+    private void OnEnemyDead(Enemy enemy)
     {
+        _enemies.Remove(enemy);
         _enemiesCount--;
         if (_enemiesCount == 0)
         {

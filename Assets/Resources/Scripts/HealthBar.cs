@@ -17,7 +17,10 @@ public class HealthBar : MonoBehaviour
             UpdateHealthBar();
             _health.HitEvent.AddListener(OnHit);
         }
-        _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
+        else
+        {
+            _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
+        }
     }
 
     private void OnHit(int damage)

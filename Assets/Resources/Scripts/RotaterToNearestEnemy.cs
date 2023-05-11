@@ -4,8 +4,17 @@ using UnityEngine;
 public class RotaterToNearestEnemy : MonoBehaviour
 {
     [SerializeField] private EnemiesDetecter _detecter;
+    [SerializeField] private bool _autoRotate = true;
 
     private void Update()
+    {
+        if (_autoRotate)
+        {
+            Rotate();
+        }
+    }
+
+    public void Rotate()
     {
         Enemy nearestEnemy = GetNearestEnemy();
         if (nearestEnemy != null)
@@ -19,7 +28,7 @@ public class RotaterToNearestEnemy : MonoBehaviour
         }
     }
 
-    private Enemy GetNearestEnemy()
+    public Enemy GetNearestEnemy()
     {
         if (_detecter.EnemyList.Count == 0 )
             return null;

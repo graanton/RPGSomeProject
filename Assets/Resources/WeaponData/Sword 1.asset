@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bb9a1b034b6054b9f86da4128c2245, type: 3}
   m_Name: Sword 1
   m_EditorClassIdentifier: 
-  _damage: 1
-  _length: 0.5
-  _width: 0.5
+  _damage: 53

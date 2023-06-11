@@ -8,6 +8,9 @@ public class JoystickAttack : MonoBehaviour
     [SerializeField] private Joystick _joystick;
     [SerializeField] private BreakRotatble _breakRotatble;
 
+    private IAttack _attack;
+    private bool _attackStoped = true;
+
     private void Awake()
     {
         _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
@@ -19,7 +22,16 @@ public class JoystickAttack : MonoBehaviour
         {
             if (_joystick.Direction.magnitude > 0)
             {
-                _breakRotatble.Rotate(_joystick.Direction);
+                if (_breakRotatble.Rotate(_joystick.Direction))
+                {
+                    _attackStoped = false;
+                    _attack.StartAttacking();
+                }
+            }
+            else if (_attackStoped == false)
+            {
+                _attackStoped = true;
+                _attack.StopAttacking();
             }
         }
     }
@@ -27,5 +39,6 @@ public class JoystickAttack : MonoBehaviour
     private void OnSpawn(NetworkObject player)
     {
         _breakRotatble = player.GetComponent<BreakRotatble>();
+        _attack = player.GetComponent<IAttack>();
     }
 }

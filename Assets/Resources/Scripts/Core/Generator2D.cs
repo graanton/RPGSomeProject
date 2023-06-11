@@ -33,14 +33,14 @@ public class Generator2D : NetworkBehaviour
     private List<Room> _rooms;
     private Delaunay2D _delaunay;
     private HashSet<Prim.Edge> _selectedEdges;
-
+    private List<Hallway> _hallways;
     private const int TRIES_COUNT = 10;
 
     public override void OnNetworkSpawn()
     {
         if (IsServer && _runInStart)
         {
-            StartCoroutine(Generate());
+            Generate();
         }
     }
 
@@ -49,17 +49,17 @@ public class Generator2D : NetworkBehaviour
         _random = new Random(_seed);
         _grid = new Grid2D<CellType>(_size, Vector2Int.zero);
         _rooms = new List<Room>();
+        _hallways = new List<Hallway>();
     }
 
-    private IEnumerator Generate()
+    public void Generate()
     {
-        yield return null;  
+        Clear();
         if (_seedIsRandom)
         {
             _seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
             OnValidate();
         }
-
         PlaceRooms();
         Triangulate();
         CreateHallways();
@@ -304,6 +304,7 @@ public class Generator2D : NetworkBehaviour
             _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
         Hallway spawnedHallway = Instantiate(hallway, placePosition, _startSpawnPoint.rotation);
         spawnedHallway.MoveBoundsPosition(position);
+        _hallways.Add(spawnedHallway);
 
         NetworkObject networkHallway = spawnedHallway.GetComponent<NetworkObject>();
         networkHallway.Spawn(true);
@@ -366,5 +367,24 @@ public class Generator2D : NetworkBehaviour
         }
 
         return true;
+    }
+
+    private void Clear()
+    {
+        List<Room> roomsToDestroy = new List<Room>(_rooms);
+        foreach (Room room in _precreatedRoom)
+        {
+            roomsToDestroy.Remove(room);
+        }
+        List<Hallway> hallwaysToDestroy = _hallways;
+
+        foreach (Room room in roomsToDestroy)
+        {
+            Destroy(room.gameObject);
+        }
+        foreach (Hallway hallway in hallwaysToDestroy)
+        {
+            Destroy(hallway.gameObject);
+        }
     }
 }

@@ -47,3 +47,4 @@ MonoBehaviour:
   _characters:
   - {fileID: 11400000, guid: 7b385b3f7ded3f34fb5fd81a8ca29e7a, type: 2}
   - {fileID: 11400000, guid: 34b39e242bebe8e4c8a627b70fdc1ed8, type: 2}
+  - {fileID: 11400000, guid: 0f4acc92705a1a64891c323690b06f0c, type: 2}

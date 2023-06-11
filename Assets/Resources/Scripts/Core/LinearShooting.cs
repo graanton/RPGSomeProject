@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,15 +10,26 @@ public class LinearShooting : NetworkBehaviour, IAttack
     [SerializeField] private NetworkObject _owner;
 
     private float _lastShootTime;
+    private bool _isShooting;
+    private IEnumerator _shooting;
 
     public void StartAttacking()
     {
-        Shoot();
+        if (_isShooting == false)
+        {
+            _shooting = Shooting();
+            StartCoroutine(_shooting);
+            _isShooting = true;
+        }
     }
 
     public void StopAttacking()
     {
-        throw new System.NotImplementedException();
+        if (_isShooting)
+        {
+            StopCoroutine(_shooting);
+            _isShooting = false;
+        }
     }
 
     [ServerRpc]
@@ -38,6 +50,15 @@ public class LinearShooting : NetworkBehaviour, IAttack
         if (Time.time - _lastShootTime > _fireRate)
         {
             ShootServerRpc(OwnerClientId, _owner.NetworkObjectId);
+        }
+    }
+
+    private IEnumerator Shooting()
+    {
+        while (true)
+        {
+            Shoot();
+            yield return null;
         }
     }
 }

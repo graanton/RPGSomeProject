@@ -148,6 +148,9 @@ GameObject:
   - component: {fileID: -1696381257936190358}
   - component: {fileID: 8352949593574846265}
   - component: {fileID: 1733127693548735178}
+  - component: {fileID: 5259197346578004934}
+  - component: {fileID: 3580844535705501874}
+  - component: {fileID: -509579554814666983}
   m_Layer: 6
   m_Name: Sworder
   m_TagString: Untagged
@@ -197,7 +200,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 2
 --- !u!136 &6099523795111492402
 CapsuleCollider:
@@ -417,6 +420,55 @@ MonoBehaviour:
   AttackEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &5259197346578004934
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948464067257890202}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 28353572c5b9847438fca456992f5d60, type: 3}
+  m_Controller: {fileID: 9100000, guid: 0e66f16a064a84e4fa0148d2a6304911, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3580844535705501874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948464067257890202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8deae8091111f4eb30a56c1f4e0d3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 5259197346578004934}
+--- !u!114 &-509579554814666983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948464067257890202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a1b1451a8b86c4f9f4e2554ab1d65f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speedName: Speed
+  _movement: {fileID: 388693780888661042}
 --- !u!1 &6051906272749958609
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +572,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -3189595122676651536, guid: 28353572c5b9847438fca456992f5d60,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.086869
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 28353572c5b9847438fca456992f5d60,
         type: 3}

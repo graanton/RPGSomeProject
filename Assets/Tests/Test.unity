@@ -307,7 +307,72 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _joystick: {fileID: 11611960}
+  _spawner: {fileID: 1252961905}
   _movement: {fileID: 0}
+--- !u!1 &86442735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 86442737}
+  - component: {fileID: 86442736}
+  m_Layer: 0
+  m_Name: Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &86442736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86442735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f78580c885f13749a1e051ecc9d67e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dungeonWidth: 100
+  _dungeonHeight: 100
+  _rooms:
+  - width: 4
+    height: 4
+    position: {x: 0, y: 0}
+  - width: 5
+    height: 5
+    position: {x: 0, y: 0}
+  - width: 3
+    height: 3
+    position: {x: 0, y: 0}
+  _floorTile: {fileID: 2661375647028462768, guid: 8ccce6a29eeb03440ac004ac06e01afe,
+    type: 3}
+  _wallTile: {fileID: 2661375647028462768, guid: 61a45e902c47a5046b69fec785ef16a0,
+    type: 3}
+  _corridorTile: {fileID: 1100351351649396323, guid: 80d32eb0a332e354cab4ff1f6ff171bb,
+    type: 3}
+  _doorTile: {fileID: 1100351351649396323, guid: cc90d3b7956312448baf6057fbcb6cf8,
+    type: 3}
+--- !u!4 &86442737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86442735}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &127845683
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,21 +916,8 @@ MonoBehaviour:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 855778944}
     PlayerPrefab: {fileID: 0}
-    NetworkPrefabs:
-    - Override: 0
-      Prefab: {fileID: 5948464067257890202, guid: dd655311a2c77b04e8d817b2cbb083bd,
-        type: 3}
-      SourcePrefabToOverride: {fileID: 5948464067257890202, guid: dd655311a2c77b04e8d817b2cbb083bd,
-        type: 3}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 750408632772122246, guid: 39a350582c72857438359f0f5352fc4b,
-        type: 3}
-      SourcePrefabToOverride: {fileID: 5948464067257890202, guid: dd655311a2c77b04e8d817b2cbb083bd,
-        type: 3}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
+    Prefabs:
+      NetworkPrefabsLists: []
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -881,6 +933,21 @@ MonoBehaviour:
     LoadSceneTimeOut: 120
     SpawnTimeout: 1
     EnableNetworkLogs: 1
+    OldPrefabList:
+    - Override: 0
+      Prefab: {fileID: 5948464067257890202, guid: dd655311a2c77b04e8d817b2cbb083bd,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 5948464067257890202, guid: dd655311a2c77b04e8d817b2cbb083bd,
+        type: 3}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 750408632772122246, guid: 39a350582c72857438359f0f5352fc4b,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 5948464067257890202, guid: dd655311a2c77b04e8d817b2cbb083bd,
+        type: 3}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
 --- !u!1 &856884876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,6 +1387,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1456,21 +1524,9 @@ MonoBehaviour:
   _characterIndex: 1
   _characterDatabase: {fileID: -5609449871382934482, guid: 34f6eebed0f807a4da4bafbe9e101781,
     type: 3}
-  playerSpawnEvent:
+  PlayerSpawnEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11611961}
-        m_TargetAssemblyTypeName: NetworkJoystickInput, Assembly-CSharp
-        m_MethodName: SetTarget
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1447622653
 GameObject:
   m_ObjectHideFlags: 0

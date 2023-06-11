@@ -35,7 +35,7 @@ public class CharacterSelector : MonoBehaviour
         for (int i = 0; i < _instantiatedStands.Count; i++)
         {
             CharacterStand currentStand = _instantiatedStands.ElementAt(i);
-            Vector3 currentStandDefalutPosition = _root.position + _spacing * (i - _selectedStandIndex);
+            Vector3 currentStandDefaultPosition = _root.position + Quaternion.Euler(0, _root.rotation.eulerAngles.y, 0) * (_spacing * (i - _selectedStandIndex));
             Vector3 offset = Vector3.zero;
 
             if (_selectedStandIndex == i)
@@ -44,7 +44,7 @@ public class CharacterSelector : MonoBehaviour
             }
 
             currentStand.transform.localPosition = Vector3.Slerp(currentStand.transform.localPosition,
-                    currentStandDefalutPosition + offset,
+                    currentStandDefaultPosition + offset,
                     _changeSpeed * Time.deltaTime);
         }
     }

@@ -55,6 +55,8 @@ GameObject:
   - component: {fileID: 5854743400936739951}
   - component: {fileID: 3240371442344092502}
   - component: {fileID: 1733328395124872188}
+  - component: {fileID: 4382794432146796515}
+  - component: {fileID: 7933895411342901339}
   m_Layer: 6
   m_Name: Bot
   m_TagString: Untagged
@@ -373,6 +375,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _detecter: {fileID: 5854743400936739951}
   _angle: 46
+--- !u!114 &4382794432146796515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867422557036436626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f242c53fe8c7459449e778ae075b0d3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _capacity: 2
+--- !u!114 &7933895411342901339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867422557036436626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a361cec88377a47934dd791ed9cfa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponHolder: {fileID: 4382794432146796515}
+  _weaponsToSet:
+  - {fileID: 0}
 --- !u!1001 &2149356974123020783
 PrefabInstance:
   m_ObjectHideFlags: 0

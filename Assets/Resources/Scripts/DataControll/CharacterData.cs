@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Dude", menuName = "Stand data")]
+[CreateAssetMenu(fileName = "Dude", menuName = "ScriptableObjects/Character data")]
 public class CharacterData : ScriptableObject
 {
     [SerializeField] private GameObject _characterPrefab;

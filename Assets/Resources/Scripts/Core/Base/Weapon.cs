@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class Weapon : NetworkBehaviour, IAttack
 {
+    public abstract WeaponConfig Config { get; }
+
     public abstract void StartAttacking();
     public abstract void StopAttacking();
     public abstract void SetOwner(Health owner);

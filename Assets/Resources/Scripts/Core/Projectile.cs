@@ -59,7 +59,8 @@ public class Projectile : NetworkBehaviour
         }
         if (IsLayerInMask(other.gameObject.layer, _obstaclesLayer))
         {
-            Destroy(gameObject);
+            if (IsServer)
+                Destroy(gameObject);
         }
     }
 

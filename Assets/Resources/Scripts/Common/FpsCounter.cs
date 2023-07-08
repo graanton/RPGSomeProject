@@ -1,8 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Linq;
-using System;
-using UnityEditor.Rendering;
 
 public class FpsCounter : MonoBehaviour
 {

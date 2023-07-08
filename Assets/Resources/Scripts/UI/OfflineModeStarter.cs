@@ -7,6 +7,6 @@ public class OfflineModeStarter : MonoBehaviour
 {
     public void Load()
     {
-        SampleScene.Load(false);
+        ChoiceCharacter.Load();
     }
 }

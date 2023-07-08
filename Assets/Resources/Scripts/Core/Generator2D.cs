@@ -17,7 +17,8 @@ public class Generator2D : NetworkBehaviour
     }
 
     [SerializeField] private Vector2Int _size;
-    [SerializeField] private int _roomCount;
+    [SerializeField] private int _maxRoomCount;
+    [SerializeField] private int _minRoomCount;
     [SerializeField] private int _seed;
     [SerializeField] Pool<Room> _roomsPool;
     [SerializeField] private Hallway _hallwayPrefab;
@@ -36,6 +37,8 @@ public class Generator2D : NetworkBehaviour
     private HashSet<Prim.Edge> _selectedEdges;
     private List<Hallway> _hallways;
     private const int TRIES_COUNT = 10;
+    private const int STEP_X = 2;
+    private const int STEP_Y = 2;
 
     public override void OnNetworkSpawn()
     {
@@ -71,7 +74,7 @@ public class Generator2D : NetworkBehaviour
 
     private void PlaceRooms()
     {
-        for (int i = 0; i < _roomCount + _precreatedRoom.Count; i++)
+        for (int i = 0; i < _maxRoomCount + _precreatedRoom.Count; i++)
         {
             Room currentRoom;
 
@@ -86,12 +89,12 @@ public class Generator2D : NetworkBehaviour
                 currentRoom = _roomsPool.GetRandomWeightedObject().obj;
             }
 
-            Vector2Int location = new Vector2Int(_random.Next(_borderLength, _size.x), _random.Next(0, _size.y));
+            Vector2Int location = new Vector2Int(_random.Next(_borderLength, _size.x), _random.Next(_borderLength, _size.y));
             Vector2Int roomSize = currentRoom.LocalBounds.size;
 
-            RectInt newRoom = new RectInt(location, roomSize);
+            RectInt newRoomBounds = new RectInt(location, roomSize);
 
-            bool add = CanPlaceRoom(newRoom);
+            bool add = CanPlaceRoom(newRoomBounds);
 
             if (add)
             {
@@ -103,6 +106,11 @@ public class Generator2D : NetworkBehaviour
                 {
                     PlaceRoom(currentRoom, location);
                 }
+            }
+            else if (i >= _maxRoomCount - _minRoomCount &&
+                _rooms.Count + _precreatedRoom.Count < _minRoomCount)
+            {
+                GarantedRandomPlaceRoom(currentRoom, new Vector2Int(STEP_X, STEP_Y));
             }
         }
     }
@@ -196,7 +204,7 @@ public class Generator2D : NetworkBehaviour
                 }
                 else if (_grid[b.Position] == CellType.None)
                 {
-                    pathCost.cost += 5;
+                    pathCost.cost += 5; //magic numbers
                 }
                 else if (_grid[b.Position] == CellType.Hallway)
                 {
@@ -313,7 +321,7 @@ public class Generator2D : NetworkBehaviour
         return spawnedHallway;
     }
 
-    public Room GarantedRandomPlaceRoom(Room room, Vector2Int step)
+    public Room GarantedRandomPlaceRoom(Room room, Vector2Int findStep)
     {
         List<Vector2Int> placePositions = new();
 
@@ -330,9 +338,9 @@ public class Generator2D : NetworkBehaviour
         bool unlucky = placePositions.Count == 0;
         if (unlucky)
         {
-            for (int x = 0; x < _grid.Size.x; x += step.x)
+            for (int x = 0; x < _grid.Size.x; x += findStep.x)
             {
-                for (int y = 0; x < _grid.Size.y; y += step.y)
+                for (int y = 0; x < _grid.Size.y; y += findStep.y)
                 {
                     if (!CanPlaceRoom(new RectInt(x, y, room.LocalBounds.width, room.LocalBounds.height))) { continue; }
                     placePositions.Add(new Vector2Int(x, y));

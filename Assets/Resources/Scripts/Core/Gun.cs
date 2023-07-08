@@ -6,7 +6,6 @@ public class Gun : Weapon
 {
     [SerializeField] private Projectile _projectilePrefab;
     [SerializeField] private Transform _muzzle;
-    [SerializeField] private LineRenderer _lineRenderer;
 
     private Health _owner;
     private bool _isWantingAttack;

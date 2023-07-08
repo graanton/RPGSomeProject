@@ -4,11 +4,10 @@ using Unity.Netcode;
 
 public class SwordAttack : NetworkBehaviour
 {
-    [SerializeField] private SwordData _data;
-    [SerializeField] private Transform _attackPoint;
     [SerializeField] private LayerMask _attackMask;
     [SerializeField] private float _attackDelay = 0.5f;
-    [SerializeField] private bool _autoAttack = true;
+    [SerializeField] private float _attackrange = 1f;
+    [SerializeField] private Transform _attackPoint;
 
     public UnityEvent AttackEvent = new();
 
@@ -16,13 +15,10 @@ public class SwordAttack : NetworkBehaviour
 
     private void Update()
     {
-        if (_autoAttack)
-        {
-            AttackInFront();
-        }
+
     }
 
-    public void AttackInFront()
+    private void AttackInFront()
     {
         if (!IsOwner)
         {

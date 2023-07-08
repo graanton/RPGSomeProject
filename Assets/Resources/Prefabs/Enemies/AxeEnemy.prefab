@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d7a98dce74c57f43a0ee9b2283190a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawner: {fileID: 0}
   _health: {fileID: -8042326105214369968}
   _healthBarFillImage: {fileID: 4171685169084543785}
   _healthBarGradient:
@@ -151,7 +152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3511694145900486658}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.049, z: 0}
+  m_LocalPosition: {x: 0, y: 1.049, z: 0.425}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -247,6 +248,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -384,6 +386,7 @@ GameObject:
   - component: {fileID: -5824475143404045171}
   - component: {fileID: 9137424125699482520}
   - component: {fileID: 7593968323748623283}
+  - component: {fileID: 5819388028470312893}
   m_Layer: 7
   m_Name: AxeEnemy
   m_TagString: Untagged
@@ -547,6 +550,40 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _attackDelay: 1
+  _autoAttack: 1
+  AttackEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5819388028470312893}
+        m_TargetAssemblyTypeName: Gun, Assembly-CSharp
+        m_MethodName: StartAttacking
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5819388028470312893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5948464067257890202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3739d3ab7e5bf6841978c18fd32e4085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _projectilePrefab: {fileID: -3508776428077654105, guid: 38e2ff265f3c0b4428d0968b73cf76a2,
+    type: 3}
+  _muzzle: {fileID: 1921335039276632727}
+  WantAttackEvent:
+    m_PersistentCalls:
+      m_Calls: []
   AttackEvent:
     m_PersistentCalls:
       m_Calls: []

@@ -701,7 +701,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fpsText: {fileID: 507869025}
-  _hudRefreshRate: 0.1
+  _hudRefreshRate: 0.3
+  _smoothFix: 20
 --- !u!1 &532613589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,6 +1848,7 @@ GameObject:
   - component: {fileID: 976833213}
   - component: {fileID: 976833212}
   - component: {fileID: 976833214}
+  - component: {fileID: 976833215}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -1933,6 +1935,19 @@ MonoBehaviour:
     PacketDelayMS: 0
     PacketJitterMS: 0
     PacketDropRate: 0
+--- !u!114 &976833215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976833210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63bb3fb316ed8274996b2f2b6cc22bda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkManager: {fileID: 976833212}
 --- !u!1 &1086577525
 GameObject:
   m_ObjectHideFlags: 0

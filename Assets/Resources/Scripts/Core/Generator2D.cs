@@ -26,7 +26,8 @@ public class Generator2D : NetworkBehaviour
     [SerializeField] private List<Room> _precreatedRoom;
     [SerializeField] private int _borderLength = 1;
     [Space]
-    [SerializeField] private bool _seedIsRandom, _runInStart;
+    [SerializeField] private bool _seedIsRandom;
+    [SerializeField] private bool _runInStart;
 
     private Random _random;
     private Grid2D<CellType> _grid;

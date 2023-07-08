@@ -5,7 +5,8 @@ using UnityEngine.Events;
 public class WeaponHolder : MonoBehaviour
 {
     [SerializeField, Min(0)] private int _capacity = 2;
-    [SerializeField] private Transform _defaultWeaponTransform;
+    [SerializeField] private Transform _activeWeaponTransform;
+    [SerializeField] private Transform _holsterWeaponTransform;
 
     private Weapon _activeWeapon;
     private Weapon[] _weapons = new Weapon[0];
@@ -35,8 +36,13 @@ public class WeaponHolder : MonoBehaviour
         {
             return;
         }
-        Destroy(_activeWeapon.gameObject);
-        _activeWeapon = Instantiate(_weapons[slot], transform);
+        if (_activeWeapon != null)
+        {
+            DisableActiveWeapon();
+        }
+        var weapon = GetWeapon(slot);
+        weapon.transform.parent = _activeWeaponTransform;
+        EnableActiveWeapon();
         ChangeEvent?.Invoke(_activeWeapon);
     }
 
@@ -58,6 +64,30 @@ public class WeaponHolder : MonoBehaviour
         }
     }
 
+    private void DisableActiveWeapon()
+    {
+        ActiveWeaponIsNullAsWarning();
+        _activeWeapon.transform.parent = _holsterWeaponTransform;
+        _activeWeapon.gameObject.SetActive(false);
+    }
+
+    private void EnableActiveWeapon()
+    {
+        ActiveWeaponIsNullAsWarning();
+        _activeWeapon.transform.parent = _holsterWeaponTransform;
+        _activeWeapon.gameObject.SetActive(true);
+    }
+
+    private bool ActiveWeaponIsNullAsWarning()
+    {
+        bool isNull = _activeWeapon == null;
+        if (isNull)
+        {
+            Debug.LogWarning("Current weapon is null");
+        }
+        return isNull;
+    }
+
     private bool CheckForExceptionSlotValue(int slot)
     {
         if (slot >= _capacity)
@@ -68,11 +98,6 @@ public class WeaponHolder : MonoBehaviour
         if (slot < 0)
         {
             Debug.LogError("Slot index below zero");
-            return true;
-        }
-        if (_weapons[slot] == null)
-        {
-            Debug.LogWarning("Slot is void");
             return true;
         }
         if (_weapons[slot] == _activeWeapon)

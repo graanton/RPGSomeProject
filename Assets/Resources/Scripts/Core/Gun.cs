@@ -14,6 +14,8 @@ public class Gun : Weapon
     public UnityEvent WantAttackEvent = new();
     public UnityEvent AttackEvent = new();
 
+    public override WeaponConfig Config => throw new System.NotImplementedException();
+
     public override void StartAttacking()
     {
         if (!_isWantingAttack)

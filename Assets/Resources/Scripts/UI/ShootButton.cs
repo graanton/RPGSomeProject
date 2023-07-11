@@ -1,31 +1,21 @@
 ﻿using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class ShootButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private PlayerSpawner _targetSpawner;
-
-    private IAttack _attack;
-
-    private void Awake()
-    {
-        _targetSpawner.PlayerSpawnEvent.AddListener(OnPlayerSpawned);
-    }
-
-    private void OnPlayerSpawned(NetworkObject player)
-    {
-        _attack = player.GetComponent<IAttack>();
-    }
+    public UnityEvent PressedEvent;
+    public UnityEvent UnpressedEvent;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _attack.StartAttacking();
+        PressedEvent?.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _attack.StopAttacking();
+        PressedEvent?.Invoke();
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,6 +8,8 @@ public class EnemiesSpawner : NetworkBehaviour
 {
     [SerializeField] private EnemyPoint[] _points;
     [SerializeField] private IncomingAndOutgoingWatcher _targetDetecter;
+
+    private List<Enemy> _spawnedEnemies = new();
 
     public EnemySpawnEvent spawnEvent = new();
 
@@ -24,7 +27,20 @@ public class EnemiesSpawner : NetworkBehaviour
                 networkedEnemy.Spawn(true);
                 networkedEnemy.TrySetParent(point.root);
                 spawnEvent?.Invoke(instanceEnemy);
+                _spawnedEnemies.Add(instanceEnemy);
             }
+        }
+    }
+
+    public override void OnDestroy()
+    {
+        if (IsServer)
+        {
+            foreach(Enemy enemy in _spawnedEnemies)
+            {
+                Destroy(enemy.gameObject);
+            }
+
         }
     }
 }

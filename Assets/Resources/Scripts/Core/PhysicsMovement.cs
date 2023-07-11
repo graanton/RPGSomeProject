@@ -1,26 +1,22 @@
-using Unity.Netcode;
-using Unity.Netcode.Components;
-using UnityEngine;
+﻿using UnityEngine;
 
-[RequireComponent(typeof(NetworkRigidbody), typeof(Rigidbody))]
-public class PhysicsMovement : Movement
+[RequireComponent(typeof(Rigidbody))]
+public class PhysicsMovement : MonoBehaviour, IMoveble
 {
-    [SerializeField] private MovementEvent _moveEvent;
-    [SerializeField] private float _speed;
+    [SerializeField] private float _speed = 3;
 
     private Rigidbody _rigidbody;
-
-    public override MovementEvent MoveEvent => _moveEvent;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    public override void Move(Vector3 direction)
+    public void Move(Vector3 direction)
     {
-        Vector3 offset = direction * _speed * Time.deltaTime;
-        _rigidbody.MovePosition(_rigidbody.position + offset);
-        _moveEvent?.Invoke(offset);
+        Vector3 offset = direction * _speed;
+        Vector3 newPosition = _rigidbody.position + offset;
+
+        _rigidbody.MovePosition(newPosition);
     }
 }

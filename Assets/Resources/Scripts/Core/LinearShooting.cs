@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-public class LinearShooting : NetworkBehaviour, IAttack
+public class LinearShooting : NetworkBehaviour
 {
     [SerializeField] private Projectile _projectilePrefab;
     [SerializeField] private Transform _attackPoint;
@@ -42,7 +42,7 @@ public class LinearShooting : NetworkBehaviour, IAttack
         var networkedProjectile = newProjectile.GetComponent<NetworkObject>();
         networkedProjectile.SpawnAsPlayerObject(clientId, true);
 
-        _lastShootTime = Time.time;
+        
     }
 
     private void Shoot()
@@ -50,6 +50,7 @@ public class LinearShooting : NetworkBehaviour, IAttack
         if (Time.time - _lastShootTime > _fireRate)
         {
             ShootServerRpc(OwnerClientId, _owner.NetworkObjectId);
+            _lastShootTime = Time.time;
         }
     }
 

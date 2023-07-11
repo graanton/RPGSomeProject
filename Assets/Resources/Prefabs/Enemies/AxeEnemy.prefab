@@ -385,7 +385,6 @@ GameObject:
   - component: {fileID: -7986978784108103671}
   - component: {fileID: -5824475143404045171}
   - component: {fileID: 9137424125699482520}
-  - component: {fileID: 7593968323748623283}
   - component: {fileID: 5819388028470312893}
   m_Layer: 7
   m_Name: AxeEnemy
@@ -532,40 +531,6 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
---- !u!114 &7593968323748623283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5948464067257890202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4fe024660ee5b74abdb7de6af9e9802, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 07bc89d56bc3ea7478080f9756e70e8b, type: 2}
-  _attackPoint: {fileID: 1921335039276632727}
-  _attackMask:
-    serializedVersion: 2
-    m_Bits: 64
-  _attackDelay: 1
-  _autoAttack: 1
-  AttackEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5819388028470312893}
-        m_TargetAssemblyTypeName: Gun, Assembly-CSharp
-        m_MethodName: StartAttacking
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &5819388028470312893
 MonoBehaviour:
   m_ObjectHideFlags: 0

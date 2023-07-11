@@ -29,6 +29,7 @@ public class Generator2D : NetworkBehaviour
     [Space]
     [SerializeField] private bool _seedIsRandom;
     [SerializeField] private bool _runInStart;
+    [SerializeField] private bool _fillGround;
 
     private Random _random;
     private Grid2D<CellType> _grid;
@@ -69,7 +70,10 @@ public class Generator2D : NetworkBehaviour
         CreateHallways();
         PathfindHallways();
         CreateHallwaysBorder();
-        FillGrid();
+        if (_fillGround)
+        {
+            FillGrid();
+        }
     }
 
     private void PlaceRooms()

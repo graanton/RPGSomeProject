@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Weapon : NetworkBehaviour, IAttack
+public abstract class Weapon : MonoBehaviour
 {
     public abstract WeaponConfig Config { get; }
 

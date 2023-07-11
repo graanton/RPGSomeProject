@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RotaterFromMove : MonoBehaviour
 {
-    [SerializeField] private PhysicsMovement _movement;
+    [SerializeField] private Movement _movement;
 
     private void Awake()
     {

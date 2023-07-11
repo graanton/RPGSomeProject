@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 4784158746390187317}
   - component: {fileID: 933155556751277880}
   - component: {fileID: 1628223300316572416}
-  - component: {fileID: 2581024224781367651}
   - component: {fileID: 8970028381042685010}
   - component: {fileID: 7053564200519418152}
   - component: {fileID: 3195881054069102031}
@@ -147,22 +146,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &2581024224781367651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7867422557036436626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 948c7b82f655a7142be593efc19136bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  _speed: 4
 --- !u!114 &8970028381042685010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 898ca348b34730e49b1d78a9ec37be34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movement: {fileID: 2581024224781367651}
+  _movement: {fileID: 0}
 --- !u!114 &4589471282114853436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,6 +371,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _capacity: 2
+  _activeWeaponTransform: {fileID: 0}
+  _holsterWeaponTransform: {fileID: 0}
+  ChangeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  SetEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7933895411342901339
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2030005287765072881}
   - component: {fileID: 3369277995771127497}
   m_Layer: 8
-  m_Name: VerticalWall
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,8 +52,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.586726, y: 2, z: 3.4176538}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Size: {x: 0.586726, y: 2, z: 2.2988873}
+  m_Center: {x: 0, y: 1, z: -0.14412165}
 --- !u!1 &4861203924896527527
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,7 +78,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4861203924896527527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.75}
+  m_LocalPosition: {x: 0, y: 0, z: 2.289}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

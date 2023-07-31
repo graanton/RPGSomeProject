@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 882192800777958506}
-  - component: {fileID: 4068566058301323001}
   - component: {fileID: 2051307401059935263}
+  - component: {fileID: 5992801054914813666}
   m_Layer: 7
   m_Name: HealthBar
   m_TagString: Untagged
@@ -39,7 +39,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4068566058301323001
+--- !u!114 &2051307401059935263
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,25 +48,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 464649998685891287}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d7a98dce74c57f43a0ee9b2283190a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c61e93d33a78bf4b8e2f2569c46c564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawner: {fileID: 0}
+--- !u!114 &5992801054914813666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464649998685891287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f36e729c79eaa604a92450e9e752bfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _health: {fileID: -8042326105214369968}
-  _healthBarFillImage: {fileID: 4171685169084543785}
-  _healthBarGradient:
+  _image: {fileID: 4171685169084543785}
+  _gradient:
     serializedVersion: 2
-    key0: {r: 0.2264151, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0, b: 0.009487629, a: 1}
-    key2: {r: 0.04107976, g: 1, b: 0, a: 0}
+    key0: {r: 0.4811321, g: 0.009433963, b: 0, a: 1}
+    key1: {r: 0.22441936, g: 1, b: 0, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 21203
-    ctime2: 65535
+    ctime1: 65535
+    ctime2: 0
     ctime3: 0
     ctime4: 0
     ctime5: 0
@@ -82,20 +93,8 @@ MonoBehaviour:
     atime7: 0
     m_Mode: 0
     m_ColorSpace: -1
-    m_NumColorKeys: 3
+    m_NumColorKeys: 2
     m_NumAlphaKeys: 2
---- !u!114 &2051307401059935263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464649998685891287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c61e93d33a78bf4b8e2f2569c46c564, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3257196073884495669
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,9 +445,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729ff9b4d08801e4c90948ac716550f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _deadEvent:
-    m_PersistentCalls:
-      m_Calls: []
   _health: 100
   _maxHealth: 100
   playerEvent:

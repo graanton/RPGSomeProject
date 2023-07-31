@@ -18,7 +18,7 @@ public class SworderAnimator : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _movement.MoveEvent.AddListener(OnMove);
+        _movement.MoveEvent += OnMove;
     }
 
     private void LateUpdate()

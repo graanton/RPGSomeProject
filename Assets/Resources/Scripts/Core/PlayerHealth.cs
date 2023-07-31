@@ -6,22 +6,23 @@ using UnityEngine.Events;
 public class PlayerHealth : Health
 {
     [SerializeField, Min(0)] private int _health, _maxHealth;
-    [SerializeField] private UnityEvent _deadEvent = new();
-    [SerializeField] private DamageEvent _hitEvent = new();
     [SerializeField] private bool _isDead;
 
     public override int MaxHealth => _maxHealth;
     public override int CurrentHealth => _health;
 
-    public override UnityEvent DeathEvent => _deadEvent;
-    public override DamageEvent HitEvent => _hitEvent;
-    public DamageEvent InvulnerableHitEvent = new();
+
+    
 
     private float _invulnerableTime;
 
+    public override event Action DeathEvent;
+    public override event Action<int> HitEvent;
+    public event Action<int> InvulnerableHitEvent;
+
     public override void OnNetworkSpawn()
     {
-        _deadEvent.AddListener(DestroyServerRpc);
+        DeathEvent += DestroyServerRpc;
     }
 
     public void BecomeInvulnerable(float time)
@@ -50,10 +51,10 @@ public class PlayerHealth : Health
             if (_invulnerableTime <= 0)
             {
                 _health -= damage;
-                _hitEvent?.Invoke(damage);
+                HitEvent?.Invoke(damage);
                 if (_health <= 0)
                 {
-                    _deadEvent?.Invoke();
+                    DeathEvent?.Invoke();
                 }
             }
             else

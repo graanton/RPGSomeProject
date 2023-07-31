@@ -3,35 +3,28 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class HealthBar: IDisposable
 {
-    [SerializeField] private PlayerSpawner _spawner;
-    [SerializeField] private Health _health;
-    [SerializeField] private Image _healthBarFillImage;
-    [SerializeField] private Gradient _healthBarGradient;
+    private Health _health;
+    private Image _healthBarFillImage;
+    private Gradient _healthBarGradient;
 
-    private void Awake()
+    public HealthBar(Health health, Image healthBarFillImage, Gradient healthBarGradient)
     {
-        if (_health != null)
-        {
-            UpdateHealthBar();
-            _health.HitEvent.AddListener(OnHit);
-        }
-        else
-        {
-            _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
-        }
+        _health = health;
+        _healthBarFillImage = healthBarFillImage;
+        _healthBarGradient = healthBarGradient;
+        _health.HitEvent += OnHit;
+    }
+
+    public void Dispose()
+    {
+        _health.HitEvent -= OnHit;
     }
 
     private void OnHit(int damage)
     {
         UpdateHealthBar();
-    }
-
-    private void OnSpawn(NetworkObject target)
-    {
-        _health = target.GetComponent<Health>();
-        Awake();
     }
 
     private void UpdateHealthBar()

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class SpawnedPlayersRegister : MonoBehaviour
 {
-    [SerializeField] private PlayerSpawner _spawner;
+    [SerializeField] private PlayerInstaller _spawner;
 
     public PlayerRegisterEvent registerEvent = new();
     public IReadOnlyCollection<NetworkObject> Players => _players;
@@ -15,7 +15,7 @@ public class SpawnedPlayersRegister : MonoBehaviour
 
     private void Awake()
     {
-        _spawner.PlayerSpawnEvent.AddListener(RegisterPlayer);
+        throw new NotImplementedException();
     }
 
     public void RegisterPlayer(NetworkObject player)

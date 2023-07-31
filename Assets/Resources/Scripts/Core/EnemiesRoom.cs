@@ -31,7 +31,7 @@ public class EnemiesRoom : LockedRoomBase
     {
         _enemies.Add(enemy);
         _enemiesCount++;
-        enemy.DeathEvent.AddListener(() => OnEnemyDead(enemy));
+        enemy.DeathEvent += () => OnEnemyDead(enemy);
     }
 
     private void OnEnemyDead(Enemy enemy)

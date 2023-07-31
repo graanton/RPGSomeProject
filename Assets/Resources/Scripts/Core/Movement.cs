@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,7 +7,7 @@ public class Movement : MonoBehaviour
     private IMoveble _movement;
     private IInput _input;
 
-    public MoveEvent MoveEvent = new();
+    public event Action<Vector3> MoveEvent;
 
     public void SetMovement(IMoveble movement)
     {
@@ -23,8 +24,11 @@ public class Movement : MonoBehaviour
         if (_movement != null && _input != null)
         {
             Vector3 direction = AxisConverter.XYToXZ(_input.GetDirection() * Time.deltaTime);
-            _movement.Move(direction);
-            MoveEvent?.Invoke(direction);
+            if (direction.magnitude > 0)
+            {
+                _movement.Move(direction);
+                MoveEvent?.Invoke(direction);
+            }
         }
     }
 }
@@ -38,5 +42,3 @@ public interface IInput
 {
     Vector2 GetDirection();
 }
-
-public class MoveEvent: UnityEvent<Vector3> { }

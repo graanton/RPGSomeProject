@@ -11,6 +11,6 @@ public class StartButtonInitializer : MonoBehaviour
 
     private void Start()
     {
-        _startButton.onClick.AddListener(() => SampleScene.Load(_characterSelectorPrefab.SelectedCharacterIndex));
+        _startButton.onClick.AddListener(() => Game.Load(_characterSelectorPrefab.SelectedCharacterIndex));
     }
 }

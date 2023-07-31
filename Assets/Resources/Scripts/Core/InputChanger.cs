@@ -1,21 +1,22 @@
 ﻿using System;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 public class InputChanger : MonoBehaviour
 {
-    [SerializeField] private Movement _movement;
     [SerializeField] private Joystick _joystickInput;
-    [SerializeField] private PlayerSpawner _playerSpawner;
 
-    private void Awake()
-    {
-        _playerSpawner.PlayerSpawnEvent.AddListener(OnSpawn);
-    }
+    private Movement _movement;
 
-    private void OnSpawn(NetworkObject player)
+    [Inject]
+    private void Construct(PlayerHealth player)
     {
         _movement = player.GetComponent<Movement>();
+    }
+
+    private void Start()
+    {
         ChangeInput();
     }
 
@@ -26,7 +27,7 @@ public class InputChanger : MonoBehaviour
         switch (SystemInfo.deviceType)
         {
             case DeviceType.Desktop:
-                defaultInput = new KeyboardInput();
+                defaultInput = new UniversalInput();
                 break;
             case DeviceType.Handheld:
                 defaultInput = _joystickInput;

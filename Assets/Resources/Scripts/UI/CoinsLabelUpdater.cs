@@ -1,28 +1,30 @@
+using System;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 public class CoinsLabelUpdater : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _label;
-    [SerializeField] private PlayerSpawner _spawner;
 
     private Wallet _target;
 
-    private void Awake()
+    [Inject]
+    private void Construct(PlayerHealth player)
     {
-        _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
+        _target = player.GetComponent<Wallet>();
     }
 
-    private void OnSpawn(NetworkObject player)
+    private void Awake()
     {
-        if (player.TryGetComponent(out Wallet wallet))
-        {
-            _target = wallet;
-            UpdateValue();
-            wallet.AddEvent.AddListener((int arg) => UpdateValue());
-            wallet.GrabEvent.AddListener((int arg) => UpdateValue());
-        }
+        _target.AddEvent.AddListener((int arg) => UpdateValue());
+        _target.GrabEvent.AddListener((int arg) => UpdateValue());
+    }
+
+    private void Start()
+    {
+        UpdateValue();
     }
 
     private void UpdateValue()

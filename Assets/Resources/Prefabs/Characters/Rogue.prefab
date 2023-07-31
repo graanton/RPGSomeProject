@@ -263,9 +263,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _maxHealth: 100
-  _deadEvent:
-    m_PersistentCalls:
-      m_Calls: []
   _isDead: 0
 --- !u!114 &4022079884794708584
 MonoBehaviour:
@@ -314,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 898ca348b34730e49b1d78a9ec37be34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movement: {fileID: 0}
+  _movement: {fileID: -7393119328006441855}
 --- !u!114 &4589471282114853436
 MonoBehaviour:
   m_ObjectHideFlags: 0

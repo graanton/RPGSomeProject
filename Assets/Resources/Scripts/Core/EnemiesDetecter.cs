@@ -24,7 +24,7 @@ public class EnemiesDetecter : MonoBehaviour
             EnemiesRoom enemiesRoom = (EnemiesRoom)room;
             foreach(Enemy enemy in enemiesRoom.Enemies)
             {
-                enemy.DeathEvent.AddListener(() => _enemyList.Remove(enemy));
+                enemy.DeathEvent += () => _enemyList.Remove(enemy);
             }
             _enemyList.AddRange(enemiesRoom.Enemies);
         }

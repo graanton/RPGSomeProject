@@ -9,7 +9,7 @@ public class RotaterFromMove : MonoBehaviour
 
     private void Awake()
     {
-        _movement.MoveEvent.AddListener(OnMove);
+        _movement.MoveEvent += OnMove;
     }
 
     private void OnMove(Vector3 direction)

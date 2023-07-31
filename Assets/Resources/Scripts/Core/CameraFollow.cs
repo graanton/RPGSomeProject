@@ -1,24 +1,19 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Vector3 _offset;
-    [SerializeField] private PlayerSpawner _spawner; 
-    [SerializeField] private Transform _target;
+    [SerializeField] private PlayerInstaller _spawner; 
 
-    private void Awake()
-    {
-        _spawner.PlayerSpawnEvent.AddListener(OnSpawn);
-    }
+    private Transform _target;
 
-    private void OnSpawn(NetworkObject player)
+    [Inject]
+    private void Construct(PlayerHealth player)
     {
-        if (player.OwnerClientId == NetworkManager.Singleton.LocalClientId)
-        {
-            _target = player.transform;
-        }
+        _target = player.transform;
     }
 
     private void Update()

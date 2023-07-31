@@ -14,7 +14,7 @@ public class PhysicsMovement : MonoBehaviour, IMoveble
 
     public void Move(Vector3 direction)
     {
-        Vector3 offset = direction * _speed;
+        Vector3 offset = direction.normalized * _speed * Time.deltaTime;
         Vector3 newPosition = _rigidbody.position + offset;
 
         _rigidbody.MovePosition(newPosition);

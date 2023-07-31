@@ -39,7 +39,7 @@ public class EnemyFollow : NetworkBehaviour
 
     private void AddTarget(Health target)
     {
-        target.DeathEvent.AddListener(() => OnPlayerDie(target));
+        target.DeathEvent += () => OnPlayerDie(target);
         _targets.Add(target);
     }
 

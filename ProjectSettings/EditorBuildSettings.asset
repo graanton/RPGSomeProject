@@ -6,17 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Resources/Scenes/StartMenu.unity
+    guid: 0f59f1f17d7c19c438d8287f8a71c0a8
+  - enabled: 1
     path: Assets/Resources/Scenes/ChoiceCharacter.unity
     guid: 5e113903dd558f54fae164bee83e772a
   - enabled: 1
-    path: Assets/Resources/Scenes/SampleScene.unity
+    path: Assets/Resources/Scenes/Game.unity
     guid: c850ee8c3b14cc8459e7e186857cf567
-  - enabled: 1
+  - enabled: 0
     path: Assets/Tests/Test.unity
     guid: f445fd6ca1fd1b84ea7904847691748b
-  - enabled: 1
-    path: Assets/Resources/Scenes/StartMenu.unity
-    guid: 0f59f1f17d7c19c438d8287f8a71c0a8
+  - enabled: 0
+    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneContractTests/Decorators/Scene1.unity
+    guid: 9561978599724fa4695e4683cf4af028
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 2852c857bb5286b4cb9a28ea376d255d,
       type: 2}

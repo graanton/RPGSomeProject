@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class EnemiesRoom : LockedRoomBase
 {
@@ -12,19 +11,22 @@ public class EnemiesRoom : LockedRoomBase
     private List<Enemy> _enemies= new List<Enemy>();
     private bool _isLocked = false;
 
+    public override event Action OpenEvent;
+    public override event Action LockEvent;
+
     public IReadOnlyCollection<Enemy> Enemies => _enemies;
 
     public void Awake()
     {
         _enemiesSpawner.spawnEvent.AddListener(OnEnemySpawend);
-        OpenEvent.AddListener(() => _isLocked = false);
-        LockEvent.AddListener(() => _isLocked = true);
+        OpenEvent += () => _isLocked = false;
+        LockEvent += () => _isLocked = true;
         _incomingAndOutgoingWatcher.enterEvent.AddListener(OnPlayerEnter);
     }
 
     private void OnPlayerEnter(Health player)
     {
-        Lock();
+        TryLock();
     }
 
     private void OnEnemySpawend(Enemy enemy)
@@ -40,14 +42,18 @@ public class EnemiesRoom : LockedRoomBase
         _enemiesCount--;
         if (_enemiesCount == 0)
         {
-            Open();
+            TryOpen();
         }
     }
 
-    public override void Lock()
+    public override bool TryLock()
     {
-        if (_enemiesCount > 0)
-            base.Lock();
+        if (_enemiesCount > 0 && !_isLocked)
+        {
+            LockEvent?.Invoke();
+            return true;
+        }
+        return false;
     }
 
     public override bool IsLocked()

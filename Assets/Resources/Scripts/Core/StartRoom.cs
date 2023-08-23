@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -5,18 +6,26 @@ using UnityEngine;
 
 public class StartRoom : LockedRoomBase
 {
-    private const bool IS_LOCKED = false;
+    private bool _isLocked = true;
 
-    public override bool IsLocked()
+    public override event Action OpenEvent;
+    public override event Action LockEvent;
+
+    public override bool IsLocked() => _isLocked;
+
+    private void Start()
     {
-        return IS_LOCKED;
+        TryOpen();
     }
 
-    public override void OnNetworkSpawn()
+    public override bool TryOpen()
     {
-        if (IsServer)
+        if (!_isLocked)
         {
-            Open();
+            return false;
         }
+        _isLocked = false;
+        OpenEvent?.Invoke();
+        return true;
     }
 }

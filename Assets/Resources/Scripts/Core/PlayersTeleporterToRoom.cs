@@ -14,8 +14,7 @@ public class PlayersTeleporterToRoom : MonoBehaviour
     {
         if (player.TryGetComponent(out RoomMover roomMover))
         {
-            roomMover.enterEvent.AddListener(
-                delegate(Room room) { TeleportPlayers(player); });
+            roomMover.enterEvent += (Room room) => TeleportPlayers(player); 
         }
     }
 

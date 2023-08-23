@@ -56,7 +56,7 @@ public class Generator2DOrigin : MonoBehaviour
     void Generate()
     {
         random = new Random(0);
-        grid = new Grid2D<CellType>(size, Vector2Int.zero);
+        grid = new Grid2D<CellType>(size);
         rooms = new List<Room>();
 
         PlaceRooms();

@@ -1,52 +1,21 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Door : Tile3dBase
+public class Door : MonoBehaviour
 {
     [SerializeField] private LockedRoomBase _room;
 
-    public UnityEvent openEvent = new();
-    public UnityEvent closeEvent = new();
+    public event Action openEvent;
+    public event Action closeEvent;
 
-    private NetworkVariable<bool> _hasNeighbore = new(false);
+    private bool _hasNeighbore = false;
 
     private void Awake()
     {
-        BoundsInit();
-        _room.HallwayAddEvent.AddListener(OnNeighboreAdded);
-        _room.OpenEvent.AddListener(Open);
-        _room.LockEvent.AddListener(Close);
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        if (IsClient)
-        {
-            if (_room.IsLocked())
-            {
-                Close();
-            }
-            else
-            {
-                Open();
-            }
-        }
-    }
-
-    private void OnNeighboreAdded(Room neighbore)
-    {
-        bool isMyNeighbore = neighbore.OnTheBuffer(LocalBounds)
-             &&
-            Vector2Int.Distance(LocalBounds.position,
-            neighbore.LocalBounds.position) == 1;
-
-        if (isMyNeighbore)
-        {
-            _hasNeighbore.Value = true;
-            Open();
-        }
+        _room.OpenEvent += Open;
+        _room.LockEvent += Close;
+        Close();
     }
 
     public void Close()
@@ -56,7 +25,7 @@ public class Door : Tile3dBase
 
     public void Open()
     {
-        if (_hasNeighbore.Value)
+        if (_hasNeighbore)
             openEvent?.Invoke();
     }
 }

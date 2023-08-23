@@ -37,7 +37,7 @@ public class DungeonPathfinder2D
 
     public DungeonPathfinder2D(Vector2Int size)
     {
-        grid = new Grid2D<Node>(size, Vector2Int.zero);
+        grid = new Grid2D<Node>(size);
 
         queue = new SimplePriorityQueue<Node, float>();
         closed = new HashSet<Node>();

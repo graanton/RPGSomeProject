@@ -13,8 +13,8 @@ public class EnemiesDetecter : MonoBehaviour
 
     private void Awake()
     {
-        _roomMover.enterEvent.AddListener(OnEnter);
-        _roomMover.exitEvent.AddListener(OnExit);
+        _roomMover.enterEvent += OnEnter;
+        _roomMover.exitEvent += OnExit;
     }
 
     private void OnEnter(Room room)

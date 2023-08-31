@@ -1,4 +1,3 @@
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -30,20 +29,11 @@ public class Gun : Weapon
         {
             AttackEvent?.Invoke();
             _isWantingAttack = false;
-            ShootServerRpc(_owner.OwnerClientId);
         }
     }
 
     public override void SetOwner(Health owner)
     {
         _owner = owner;
-    }
-
-    [ServerRpc]
-    private void ShootServerRpc(ulong ownerClientId)
-    {
-        Projectile createdProjectile = Instantiate(_projectilePrefab,
-            _muzzle.transform.position, _muzzle.transform.rotation);
-        createdProjectile.SetOwnerNetworkObjectId(ownerClientId);
     }
 }

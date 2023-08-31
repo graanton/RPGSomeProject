@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Graphs;
 using Resources.Scripts.Common;
 using UnityEngine;
@@ -22,9 +23,9 @@ public class Generator2D : MonoBehaviour
     [SerializeField] Pool<Room> _roomsPool;
     [SerializeField] private Hallway _hallwayPrefab;
     [SerializeField] private Hallway _hallwayBorderPrefab;
-    [SerializeField] private Transform _startSpawnPoint;
+    [SerializeField] private Transform _root;
     [SerializeField] private List<Room> _precreatedRooms;
-    [SerializeField] private int _gridBorderWidth = 1;
+    [SerializeField] private List<Room> _garantedToPlaceRooms;
     [Space]
     [SerializeField] private bool _seedIsRandom;
     [SerializeField] private bool _runInStart;
@@ -71,45 +72,50 @@ public class Generator2D : MonoBehaviour
         CreateHallwaysBorder();
     }
 
+    private int TotalUnrandomRooms() => _precreatedRooms.Count + _garantedToPlaceRooms.Count;
+    
     private void PlaceRooms()
     {
-        for (int i = 0; i < _maxRoomCount + _precreatedRooms.Count; i++)
+        for (int i = 0; i < _maxRoomCount + TotalUnrandomRooms(); i++)
         {
             Room currentRoom;
 
             bool currentRoomIsPrecreated = i < _precreatedRooms.Count;
+            bool currentRoomIsGarantedToPlace =
+                !currentRoomIsPrecreated && i < _precreatedRooms.Count + _garantedToPlaceRooms.Count;
 
             if (currentRoomIsPrecreated)
             {
                 currentRoom = _precreatedRooms[i];
+            }
+            else if (currentRoomIsGarantedToPlace)
+            {
+                currentRoom = _garantedToPlaceRooms[i - _precreatedRooms.Count];
             }
             else
             {
                 currentRoom = _roomsPool.GetRandomWeightedObject().obj;
             }
 
-            Vector2Int location = new Vector2Int(_random.Next(_gridBorderWidth, _size.x), _random.Next(_gridBorderWidth, _size.y));
-            Vector2Int roomSize = currentRoom.Size;
-
-            RectInt newRoomBounds = new RectInt(location, roomSize);
-
-            bool add = CanPlaceRoom(newRoomBounds);
-
-            if (add)
+            if (currentRoomIsPrecreated)
             {
-                if (currentRoomIsPrecreated)
-                {
-                    RegisterRoom(currentRoom, CulculateRoomRect(currentRoom).position);
-                }
-                else
+                RegisterRoom(currentRoom, CalculateRoomRect(currentRoom).position);
+            }
+            else if (currentRoomIsGarantedToPlace)
+            {
+                GarantedRandomPlaceRoom(currentRoom);
+            }
+            else if (_roomsPositions.Count - TotalUnrandomRooms() - i >= _maxRoomCount - _minRoomCount)
+            {
+                GarantedRandomPlaceRoom(currentRoom);
+            }
+            else
+            {
+                Vector2Int location = new Vector2Int(_random.Next(0, _size.x), _random.Next(0, _size.y));
+                if (CanPlaceRoom(new RectInt(location, currentRoom.Size)))
                 {
                     PlaceRoom(currentRoom, location);
                 }
-            }
-            else if (i >= _maxRoomCount - _minRoomCount &&
-                _roomsPositions.Count + _precreatedRooms.Count < _minRoomCount)
-            {
-                GarantedRandomPlaceRoom(currentRoom, new Vector2Int(STEP_X, STEP_Y));
             }
         }
     }
@@ -171,7 +177,7 @@ public class Generator2D : MonoBehaviour
         {
             if (_grid[point] == CellType.None)
             {
-                PlaceHalway(_hallwayBorderPrefab, point);
+                PlaceHallway(_hallwayBorderPrefab, point);
             }
         }
     }
@@ -185,8 +191,8 @@ public class Generator2D : MonoBehaviour
             var startRoom = (edge.U as Vertex<Room>).Item;
             var endRoom = (edge.V as Vertex<Room>).Item;
 
-            var startPosf = CulculateRoomRect(startRoom).center;
-            var endPosf = CulculateRoomRect(endRoom).center;
+            var startPosf = GetRoomRect(startRoom).center;
+            var endPosf = GetRoomRect(endRoom).center;
             var startPos = new Vector2Int((int)startPosf.x, (int)startPosf.y);
             var endPos = new Vector2Int((int)endPosf.x, (int)endPosf.y);
 
@@ -233,26 +239,28 @@ public class Generator2D : MonoBehaviour
                     }
                 }
                 
-                List<Hallway> hallwaysInConnect = new();
+                Dictionary<Hallway, Vector2Int> hallwaysInConnect = new();
                 foreach (var pos in path)
                 {
                     if (_grid[pos] == CellType.Hallway)
                     {
-                        Hallway placedHallway = PlaceHalway(_hallwayPrefab, pos);
-                        hallwaysInConnect.Add(placedHallway);
+                        Hallway placedHallway = PlaceHallway(_hallwayPrefab, pos);
+                        hallwaysInConnect[placedHallway] = pos;
                     }
                 }
 
                 Connect connect = new Connect(hallwaysInConnect, startRoom, endRoom);
+                startRoom.SetConnectionData(connect);
+                endRoom.SetConnectionData(connect);
             }
         }
     }
 
     private Room PlaceRoom(Room room, Vector2Int position)
     {
-        Vector3 placePosition = _startSpawnPoint.position +
-            _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
-        Room spawnedRoom = Instantiate(room, placePosition, _startSpawnPoint.rotation);
+        Vector3 placePosition = _root.position +
+            _root.right * position.x + _root.forward * position.y;
+        Room spawnedRoom = Instantiate(room, placePosition, _root.rotation, _root);
         
         RegisterRoom(spawnedRoom, position);
 
@@ -269,25 +277,26 @@ public class Generator2D : MonoBehaviour
         }
     }
 
-    private Hallway PlaceHalway(Hallway hallway, Vector2Int position)
+    private Hallway PlaceHallway(Hallway hallway, Vector2Int position)
     {
         _grid[position] = CellType.Hallway;
-        Vector3 placePosition = _startSpawnPoint.position +
-            _startSpawnPoint.right * position.x + _startSpawnPoint.forward * position.y;
-        Hallway spawnedHallway = Instantiate(hallway, placePosition, _startSpawnPoint.rotation);
+        Vector3 placePosition = _root.position +
+            _root.right * position.x + _root.forward * position.y;
+        Hallway spawnedHallway = Instantiate(hallway, placePosition, _root.rotation, _root);
         
         _hallways.Add(spawnedHallway);
         
         return spawnedHallway;
     }
 
-    public Room GarantedRandomPlaceRoom(Room room, Vector2Int findStep)
+    public Room GarantedRandomPlaceRoom(Room room)
     {
-        List<Vector2Int> placePositions = new();
+        HashSet<Vector2Int> placePositions = new();
+        Vector2Int findStep = new Vector2Int(STEP_X, STEP_Y);
 
         for (int tries = 0; tries < TRIES_COUNT; tries++)
         {
-            Vector2Int randomPoint = new Vector2Int(_random.Next(0, _grid.Size.x - 1), _random.Next(0, _grid.Size.y - 1));
+            Vector2Int randomPoint = new Vector2Int(_random.Next(0, _grid.Size.x), _random.Next(0, _grid.Size.y));
             Vector2Int roomSize = room.Size;
             if (CanPlaceRoom(new RectInt(randomPoint, roomSize)))
             {
@@ -302,13 +311,13 @@ public class Generator2D : MonoBehaviour
             {
                 for (int y = 0; x < _grid.Size.y; y += findStep.y)
                 {
-                    if (!CanPlaceRoom(new RectInt(x, y, GetRoomRect(room).width, GetRoomRect(room).height))) { continue; }
+                    if (!CanPlaceRoom(new RectInt(x, y, room.Size.x, room.Size.y))) { continue; }
                     placePositions.Add(new Vector2Int(x, y));
                 }
             }
         }
 
-        Vector2Int placePosition = placePositions[_random.Next(placePositions.Count - 1)];
+        Vector2Int placePosition = placePositions.ElementAt(_random.Next(placePositions.Count - 1));
         placePositions.Clear();
         Room placedRoom = PlaceRoom(room, placePosition);
 
@@ -317,11 +326,11 @@ public class Generator2D : MonoBehaviour
 
     private bool CanPlaceRoom(RectInt roomData)
     {
-        bool overlapGridBounds = roomData.xMax > _grid.Size.x - _gridBorderWidth ||
-            roomData.yMax > _grid.Size.y - _gridBorderWidth ||
-            roomData.position.x < _gridBorderWidth || roomData.position.y < _gridBorderWidth;
+        bool includedToGrid = roomData.xMax <= _grid.Size.x &&
+            roomData.yMax <= _grid.Size.y &&
+            roomData.xMin >= 0 && roomData.yMin >= 0;
 
-        if (overlapGridBounds)
+        if (!includedToGrid)
         {
             return false;
         }
@@ -365,10 +374,10 @@ public class Generator2D : MonoBehaviour
         throw new KeyNotFoundException();
     }
 
-    private RectInt CulculateRoomRect(Room room)
+    private RectInt CalculateRoomRect(Room room)
     {
-        Vector2 localPosition = room.transform.localPosition;
-        Vector2Int roomPosition = new Vector2Int((int)localPosition.x, (int)localPosition.y);
+        Vector3 localPosition = room.transform.localPosition;
+        Vector2Int roomPosition = AxisConverter.XZToXYInt(localPosition);
         return new RectInt(roomPosition, room.Size);
     }
 }

@@ -1,8 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
-using UnityEngine;
 
 public class StartRoom : LockedRoomBase
 {
@@ -12,20 +8,23 @@ public class StartRoom : LockedRoomBase
     public override event Action LockEvent;
 
     public override bool IsLocked() => _isLocked;
-
+    
     private void Start()
     {
-        TryOpen();
+        Open();
     }
 
-    public override bool TryOpen()
+    public override void Open()
     {
-        if (!_isLocked)
+        if (_isLocked)
         {
-            return false;
+            _isLocked = false;
+            OpenEvent?.Invoke();
         }
-        _isLocked = false;
-        OpenEvent?.Invoke();
-        return true;
+        
+    }
+    
+    public override void Lock()
+    {
     }
 }

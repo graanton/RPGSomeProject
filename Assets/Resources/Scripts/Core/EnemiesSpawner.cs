@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemiesSpawner : NetworkBehaviour
+public class EnemiesSpawner : MonoBehaviour
 {
     [SerializeField] private EnemyPoint[] _points;
     [SerializeField] private IncomingAndOutgoingWatcher _targetDetecter;
@@ -13,34 +13,24 @@ public class EnemiesSpawner : NetworkBehaviour
 
     public EnemySpawnEvent spawnEvent = new();
 
-    public override void OnNetworkSpawn()
+    private void Start()
     {
-        if (IsServer)
+        foreach (EnemyPoint point in _points)
         {
-            foreach (EnemyPoint point in _points)
-            {
-                Enemy instanceEnemy = Instantiate(point.enemyPrefab,
-                    point.root.position, point.root.rotation);
-                instanceEnemy.SetTargetDetecter(_targetDetecter);
+            Enemy instanceEnemy = Instantiate(point.enemyPrefab,
+                point.root.position, point.root.rotation);
+            instanceEnemy.SetTargetDetecter(_targetDetecter);
 
-                NetworkObject networkedEnemy = instanceEnemy.GetComponent<NetworkObject>();
-                networkedEnemy.Spawn(true);
-                networkedEnemy.TrySetParent(point.root);
-                spawnEvent?.Invoke(instanceEnemy);
-                _spawnedEnemies.Add(instanceEnemy);
-            }
+            spawnEvent?.Invoke(instanceEnemy);
+            _spawnedEnemies.Add(instanceEnemy);
         }
     }
 
-    public override void OnDestroy()
+    private void OnDestroy()
     {
-        if (IsServer)
+        foreach(Enemy enemy in _spawnedEnemies)
         {
-            foreach(Enemy enemy in _spawnedEnemies)
-            {
-                Destroy(enemy.gameObject);
-            }
-
+            Destroy(enemy.gameObject);
         }
     }
 }

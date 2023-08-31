@@ -8,7 +8,7 @@ public class EnemiesRoom : LockedRoomBase
     [SerializeField] private IncomingAndOutgoingWatcher _incomingAndOutgoingWatcher;
 
     private int _enemiesCount = 0;
-    private List<Enemy> _enemies= new List<Enemy>();
+    private List<Enemy> _enemies = new List<Enemy>();
     private bool _isLocked = false;
 
     public override event Action OpenEvent;
@@ -16,7 +16,7 @@ public class EnemiesRoom : LockedRoomBase
 
     public IReadOnlyCollection<Enemy> Enemies => _enemies;
 
-    public void Awake()
+    private void Awake()
     {
         _enemiesSpawner.spawnEvent.AddListener(OnEnemySpawend);
         OpenEvent += () => _isLocked = false;
@@ -26,7 +26,7 @@ public class EnemiesRoom : LockedRoomBase
 
     private void OnPlayerEnter(Health player)
     {
-        TryLock();
+        Lock();
     }
 
     private void OnEnemySpawend(Enemy enemy)
@@ -42,18 +42,24 @@ public class EnemiesRoom : LockedRoomBase
         _enemiesCount--;
         if (_enemiesCount == 0)
         {
-            TryOpen();
+            Open();
         }
     }
 
-    public override bool TryLock()
+    public override void Lock()
     {
         if (_enemiesCount > 0 && !_isLocked)
         {
             LockEvent?.Invoke();
-            return true;
         }
-        return false;
+    }
+
+    public override void Open()
+    {
+        if (_enemiesCount == 0 && _isLocked)
+        {
+            LockEvent?.Invoke();
+        }
     }
 
     public override bool IsLocked()

@@ -10,6 +10,6 @@ public abstract class LockedRoomBase: Room
 
     public abstract bool IsLocked();
 
-    public virtual bool TryLock() => false;
-    public virtual bool TryOpen()=> false;
+    public abstract void Lock();
+    public abstract void Open();
 }

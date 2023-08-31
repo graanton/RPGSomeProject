@@ -1,21 +1,11 @@
 using Unity.AI.Navigation;
-using Unity.Netcode;
 using UnityEngine;
 
-public class TileSurfaceBaker : NetworkBehaviour
+public class TileSurfaceBaker : MonoBehaviour
 {
     [SerializeField] private NavMeshSurface _tileSurface;
 
-    public override void OnNetworkSpawn()
-    {
-        if (IsServer)
-        {
-            BuildSurfaceClientRpc();
-        }
-    }
-
-    [ClientRpc]
-    private void BuildSurfaceClientRpc()
+    private void Start()
     {
         _tileSurface.BuildNavMesh();
     }

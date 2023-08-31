@@ -15,11 +15,6 @@ public class Enemy : Health
     public override int CurrentHealth => _health;
     public override int MaxHealth => _maxHealth;
 
-    private void Awake()
-    {
-        DeathEvent += () => DestroyServerRpc();
-    }
-
     public void SetTargetDetecter(IncomingAndOutgoingWatcher detecter)
     {
         detecter.enterEvent.AddListener(
@@ -33,21 +28,12 @@ public class Enemy : Health
             Debug.LogError("Invalid damage value");
             return;
         }
-        if (IsOwner)
+        _health -= damage;
+        HitEvent?.Invoke(damage);
+        if (_health <= 0)
         {
-            _health -= damage;
-            HitEvent?.Invoke(damage);
-            if (_health <= 0)
-            {
-                DeathEvent?.Invoke();
-            }
+            DeathEvent?.Invoke();
         }
-    }
-
-    [ServerRpc]
-    private void DestroyServerRpc()
-    {
-        Destroy(gameObject);
     }
 
     public override void Heal(int amount)

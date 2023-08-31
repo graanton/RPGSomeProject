@@ -1,9 +1,7 @@
 using System;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Events;
 
-public abstract class Health : NetworkBehaviour
+public abstract class Health : MonoBehaviour
 {
     public abstract event Action DeathEvent;
     public abstract event Action<int> HitEvent;

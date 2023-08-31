@@ -11,19 +11,11 @@ public class PlayerHealth : Health
     public override int MaxHealth => _maxHealth;
     public override int CurrentHealth => _health;
 
-
-    
-
     private float _invulnerableTime;
 
     public override event Action DeathEvent;
     public override event Action<int> HitEvent;
     public event Action<int> InvulnerableHitEvent;
-
-    public override void OnNetworkSpawn()
-    {
-        DeathEvent += DestroyServerRpc;
-    }
 
     public void BecomeInvulnerable(float time)
     {
@@ -45,23 +37,21 @@ public class PlayerHealth : Health
             Debug.LogError("Invalid damage value");
             return;
         }
-
-        if (IsOwner)
+        
+        if (_invulnerableTime <= 0)
         {
-            if (_invulnerableTime <= 0)
+            _health -= damage;
+            HitEvent?.Invoke(damage);
+            if (_health <= 0)
             {
-                _health -= damage;
-                HitEvent?.Invoke(damage);
-                if (_health <= 0)
-                {
-                    DeathEvent?.Invoke();
-                }
-            }
-            else
-            {
-                InvulnerableHitEvent?.Invoke(damage);
+                DeathEvent?.Invoke();
             }
         }
+        else
+        {
+            InvulnerableHitEvent?.Invoke(damage);
+        }
+        
     }
 
     public override void Heal(int amount)
@@ -75,11 +65,5 @@ public class PlayerHealth : Health
         {
             _invulnerableTime -= Time.deltaTime;
         }
-    }
-
-    [ServerRpc]
-    private void DestroyServerRpc()
-    {
-        Destroy(gameObject);
     }
 }

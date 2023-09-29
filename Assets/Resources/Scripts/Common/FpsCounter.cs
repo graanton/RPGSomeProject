@@ -48,8 +48,14 @@ public class FpsCounter : MonoBehaviour
 
     private void UpdateFpsCounter()
     {
+        float uncupedAverageFps = 0;
+        foreach(float currentFps in _fpsValues)
+        {
+            uncupedAverageFps += currentFps;
+        }
+        uncupedAverageFps /= _fpsValues.Length;
         int averageFps = Mathf.Clamp(
-            Mathf.RoundToInt(Enumerable.Average(_fpsValues)),
+            Mathf.RoundToInt(uncupedAverageFps),
             0, MaxFpsValue);
 
         _fpsText.SetText(_possibleValues[averageFps]);

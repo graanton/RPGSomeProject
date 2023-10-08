@@ -8,10 +8,12 @@ public class BreakRotatble : MonoBehaviour
     [SerializeField] EnemiesDetecter _detecter;
     [SerializeField, Range(0, 360)] private float _angle = 30;
 
-    public bool Rotate(Vector2 direction)
+    public bool HasTargets() => _detecter.EnemyList.Count > 0;
+    
+    public void Rotate(Vector2 direction)
     {
         var enemies = _detecter.EnemyList;
-        if (enemies.Count > 0)
+        if (HasTargets())
         {
             Enemy nearEnemyToAngle = enemies.ElementAt(0);
             float angle = CulculateAngle(nearEnemyToAngle.transform, direction);
@@ -31,9 +33,7 @@ public class BreakRotatble : MonoBehaviour
                     nearEnemyToAngle.transform.position - transform.position);
             }
             transform.rotation = Quaternion.LookRotation(lookDirection);
-            return true;
         }
-        return false;
     }
 
     private float CulculateAngle(Transform other, Vector2 direction)

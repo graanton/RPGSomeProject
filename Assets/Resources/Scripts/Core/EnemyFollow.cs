@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyFollow : NetworkBehaviour
+public class EnemyFollow : MonoBehaviour
 {
     [SerializeField] private Enemy _targetDetecter;
 
@@ -15,21 +15,12 @@ public class EnemyFollow : NetworkBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _agent.enabled = false;
         _targetDetecter.playerEvent.AddListener(AddTarget); 
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        if (IsServer)
-        {
-            _agent.enabled = true;
-        }
     }
 
     private void Update()
     {
-        if (IsServer && _targets.Count > 0)
+        if (_targets.Count > 0)
         {
             Transform target = GetNeargestTarget();
 

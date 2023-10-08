@@ -24,18 +24,18 @@ public class Generator2D : MonoBehaviour
     [SerializeField] private Hallway _hallwayPrefab;
     [SerializeField] private Hallway _hallwayBorderPrefab;
     [SerializeField] private Transform _root;
-    [SerializeField] private List<Room> _precreatedRooms;
-    [SerializeField] private List<Room> _garantedToPlaceRooms;
+    [SerializeField] private List<Room> _precreatedRooms = new();
+    [SerializeField] private List<Room> _garantedToPlaceRooms = new();
     [Space]
     [SerializeField] private bool _seedIsRandom;
     [SerializeField] private bool _runInStart;
 
     private Random _random;
     private Grid2D<CellType> _grid;
-    private Dictionary<Room, Vector2Int> _roomsPositions;
+    private Dictionary<Room, Vector2Int> _roomsPositions = new();
     private Delaunay2D _delaunay;
     private HashSet<Prim.Edge> _selectedEdges;
-    private List<Hallway> _hallways;
+    private List<Hallway> _hallways = new();
     
     private const int TRIES_COUNT = 10;
     private const int STEP_X = 2;

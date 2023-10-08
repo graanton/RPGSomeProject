@@ -30,7 +30,10 @@ public class EnemiesSpawner : MonoBehaviour
     {
         foreach(Enemy enemy in _spawnedEnemies)
         {
-            Destroy(enemy.gameObject);
+            if (enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
         }
     }
 }

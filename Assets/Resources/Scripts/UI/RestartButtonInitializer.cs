@@ -10,6 +10,7 @@ public class RestartButtonInitializer : MonoBehaviour
     private void Start()
     {
         _reloadButton.onClick.AddListener(() => StartMenu.Load());
-        _reloadButton.onClick.AddListener(() => NetworkManager.Singleton.Shutdown());
+        if (NetworkManager.Singleton != null)
+            _reloadButton.onClick.AddListener(() => NetworkManager.Singleton.Shutdown());
     }
 }

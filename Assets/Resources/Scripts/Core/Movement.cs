@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
         if (_movement != null && _input != null)
         {
             Vector3 direction = AxisConverter.XYToXZ(_input.GetDirection() * Time.deltaTime);
-            if (direction.magnitude > 0)
+            if (direction != Vector3.zero)
             {
                 _movement.Move(direction);
                 MoveEvent?.Invoke(direction);

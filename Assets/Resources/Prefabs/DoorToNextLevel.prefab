@@ -54,7 +54,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 143090648610936984}
-  - component: {fileID: 2344609196602215985}
+  - component: {fileID: -1493924294833705283}
   m_Layer: 0
   m_Name: DoorToNextLevel
   m_TagString: Untagged
@@ -77,9 +77,9 @@ Transform:
   - {fileID: 2007187419691554438}
   - {fileID: 6228123122905226886}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2344609196602215985
+--- !u!114 &-1493924294833705283
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,10 +88,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2938806974260952818}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2f69f24fed7e6145a2abe7caae4aa3d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e2b338651456f644b6beb3f9bbda44b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _size: {x: 4, y: 3}
+  <Size>k__BackingField: {x: 4, y: 3}
 --- !u!1 &3706317929981026953
 GameObject:
   m_ObjectHideFlags: 0

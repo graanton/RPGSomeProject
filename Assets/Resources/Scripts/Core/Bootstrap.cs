@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
 {
-    private void Update()
+    [SerializeField] private Generator2D _generator;
+
+    private void Start()
     {
-        
+        _generator.Generate();
     }
 }

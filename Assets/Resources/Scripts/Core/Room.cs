@@ -2,11 +2,9 @@ using System;
 using Resources.Scripts.Common;
 using UnityEngine;
 
-public class Room : MonoBehaviour
+public abstract class Room : MonoBehaviour
 {
-    [SerializeField] private Vector2Int _size;
-
-    public Vector2Int Size => _size;
+    [field: SerializeField] public Vector2Int Size { get; private set; }
 
     public event Action<Connect> ConnectedEvent;
 
@@ -14,4 +12,6 @@ public class Room : MonoBehaviour
     {
         ConnectedEvent?.Invoke(connect);
     }
+
+    public virtual void Initialize() { }
 }

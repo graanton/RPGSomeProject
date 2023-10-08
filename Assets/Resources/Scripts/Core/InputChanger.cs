@@ -22,21 +22,6 @@ public class InputChanger : MonoBehaviour
 
     private void ChangeInput()
     {
-        IInput defaultInput;
-
-        switch (SystemInfo.deviceType)
-        {
-            case DeviceType.Desktop:
-                defaultInput = new UniversalInput();
-                break;
-            case DeviceType.Handheld:
-                defaultInput = _joystickInput;
-                break;
-            default:
-                Debug.LogError("Unknoun device");
-                return;
-        }
-
-        _movement.SetInput(defaultInput);
+        _movement.SetInput(_joystickInput);
     }
 }

@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 7053564200519418152}
   - component: {fileID: 3195881054069102031}
   - component: {fileID: 4022079884794708584}
-  - component: {fileID: 4750124361257137020}
   - component: {fileID: 2806541146574681361}
   - component: {fileID: 4589471282114853436}
   - component: {fileID: 1620762945367219158}
@@ -198,9 +197,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _maxHealth: 100
-  _deadEvent:
-    m_PersistentCalls:
-      m_Calls: []
   _isDead: 0
 --- !u!114 &4022079884794708584
 MonoBehaviour:
@@ -214,29 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15baa8dfe32cf694f9d7d6772d5efeb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enterEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  exitEvent:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &4750124361257137020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7867422557036436626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61e730196e412b947bf4efdd2a43f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: -3508776428077654105, guid: 996cbf3ae22e82d48b909e51f360d5d5,
-    type: 3}
-  _attackPoint: {fileID: 820183513435303321}
-  _fireRate: 1
-  _owner: {fileID: 1628223300316572416}
 --- !u!114 &2806541146574681361
 MonoBehaviour:
   m_ObjectHideFlags: 0

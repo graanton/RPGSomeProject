@@ -66,4 +66,9 @@ public class EnemiesRoom : LockedRoomBase
     {
          return _isLocked;
     }
+
+    public override void Initialize()
+    {
+        
+    }
 }

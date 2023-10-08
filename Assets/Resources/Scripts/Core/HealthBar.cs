@@ -15,6 +15,7 @@ public class HealthBar: IDisposable
         _healthBarFillImage = healthBarFillImage;
         _healthBarGradient = healthBarGradient;
         _health.HitEvent += OnHit;
+        UpdateHealthBar();
     }
 
     public void Dispose()

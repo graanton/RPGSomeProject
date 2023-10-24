@@ -5,7 +5,7 @@ public class TileSurfaceBaker : MonoBehaviour
 {
     [SerializeField] private NavMeshSurface _tileSurface;
 
-    private void Start()
+    public void Bake()
     {
         _tileSurface.BuildNavMesh();
     }

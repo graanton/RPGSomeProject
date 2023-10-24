@@ -13,5 +13,5 @@ public abstract class Room : MonoBehaviour
         ConnectedEvent?.Invoke(connect);
     }
 
-    public virtual void Initialize() { }
+    public abstract void Initialize();
 }

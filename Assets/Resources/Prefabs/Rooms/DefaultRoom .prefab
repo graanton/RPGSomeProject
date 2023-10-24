@@ -82,9 +82,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 125e57f9399948a44b9d1e91fd5de05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Size>k__BackingField: {x: 9, y: 15}
+  <Size>k__BackingField: {x: 11, y: 15}
   _enemiesSpawner: {fileID: 8317007280267681083}
   _incomingAndOutgoingWatcher: {fileID: 3144332282218126775}
+  _navMeshBaker: {fileID: 6790450761605654318}
 --- !u!114 &6790450761605654318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,9 +156,6 @@ MonoBehaviour:
       type: 3}
     root: {fileID: 8536348695793191702}
   _targetDetecter: {fileID: 3144332282218126775}
-  spawnEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3144332282218126775
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class EnemiesSpawner : MonoBehaviour
 {
@@ -11,9 +9,9 @@ public class EnemiesSpawner : MonoBehaviour
 
     private List<Enemy> _spawnedEnemies = new();
 
-    public EnemySpawnEvent spawnEvent = new();
+    public event Action<Enemy> SpawnEvent;
 
-    private void Start()
+    public void SpawnEnemies()
     {
         foreach (EnemyPoint point in _points)
         {
@@ -21,7 +19,7 @@ public class EnemiesSpawner : MonoBehaviour
                 point.root.position, point.root.rotation);
             instanceEnemy.SetTargetDetecter(_targetDetecter);
 
-            spawnEvent?.Invoke(instanceEnemy);
+            SpawnEvent?.Invoke(instanceEnemy);
             _spawnedEnemies.Add(instanceEnemy);
         }
     }
@@ -44,6 +42,3 @@ public struct EnemyPoint
     public Enemy enemyPrefab;
     public Transform root;
 }
-
-[Serializable]
-public class EnemySpawnEvent: UnityEvent<Enemy> { }

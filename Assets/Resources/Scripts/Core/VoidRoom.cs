@@ -19,4 +19,10 @@ public class VoidRoom : LockedRoomBase
     {
         throw new Exception("Room can not be open");
     }
+
+
+    public override void Initialize()
+    {
+        OpenEvent?.Invoke();
+    }
 }

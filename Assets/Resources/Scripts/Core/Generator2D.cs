@@ -49,7 +49,7 @@ public class Generator2D : MonoBehaviour
         }
     }
 
-    private void OnValidate()
+    private void Initialize()
     {
         _random = new Random(_seed);
         _grid = new Grid2D<CellType>(_size);
@@ -63,13 +63,22 @@ public class Generator2D : MonoBehaviour
         if (_seedIsRandom)
         {
             _seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-            OnValidate();
+            Initialize();
         }
         PlaceRooms();
         Triangulate();
         CreateHallways();
         PathfindHallways();
         CreateHallwaysBorder();
+        InitializeRooms();
+    }
+
+    private void InitializeRooms()
+    {
+        foreach (Room room in _roomsPositions.Keys)
+        {
+            room.Initialize();
+        }
     }
 
     private int TotalUnrandomRooms() => _precreatedRooms.Count + _garantedToPlaceRooms.Count;
@@ -349,12 +358,11 @@ public class Generator2D : MonoBehaviour
     private void Clear()
     {
         List<Room> roomsToDestroy = new List<Room>(_roomsPositions.Keys);
+        List<Hallway> hallwaysToDestroy = _hallways;
         foreach (Room precreatedRoom in _precreatedRooms)
         {
             roomsToDestroy.Remove(precreatedRoom);
         }
-        List<Hallway> hallwaysToDestroy = _hallways;
-
         foreach (Room room in roomsToDestroy)
         {
             Destroy(room.gameObject);

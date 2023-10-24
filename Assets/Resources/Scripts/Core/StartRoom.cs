@@ -8,11 +8,6 @@ public class StartRoom : LockedRoomBase
     public override event Action LockEvent;
 
     public override bool IsLocked() => _isLocked;
-    
-    private void Start()
-    {
-        Open();
-    }
 
     public override void Open()
     {
@@ -26,5 +21,10 @@ public class StartRoom : LockedRoomBase
     
     public override void Lock()
     {
+    }
+
+    public override void Initialize()
+    {
+        Open();
     }
 }

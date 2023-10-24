@@ -6,6 +6,7 @@ public class EnemiesRoom : LockedRoomBase
 {
     [SerializeField] private EnemiesSpawner _enemiesSpawner;
     [SerializeField] private IncomingAndOutgoingWatcher _incomingAndOutgoingWatcher;
+    [SerializeField] private TileSurfaceBaker _navMeshBaker;
 
     private int _enemiesCount = 0;
     private List<Enemy> _enemies = new List<Enemy>();
@@ -15,14 +16,6 @@ public class EnemiesRoom : LockedRoomBase
     public override event Action LockEvent;
 
     public IReadOnlyCollection<Enemy> Enemies => _enemies;
-
-    private void Awake()
-    {
-        _enemiesSpawner.spawnEvent.AddListener(OnEnemySpawend);
-        OpenEvent += () => _isLocked = false;
-        LockEvent += () => _isLocked = true;
-        _incomingAndOutgoingWatcher.enterEvent.AddListener(OnPlayerEnter);
-    }
 
     private void OnPlayerEnter(Health player)
     {
@@ -69,6 +62,11 @@ public class EnemiesRoom : LockedRoomBase
 
     public override void Initialize()
     {
-        
+        _enemiesSpawner.SpawnEvent += OnEnemySpawend;
+        OpenEvent += () => _isLocked = false;
+        LockEvent += () => _isLocked = true;
+        _incomingAndOutgoingWatcher.enterEvent.AddListener(OnPlayerEnter);
+        _navMeshBaker.Bake();
+        _enemiesSpawner.SpawnEnemies();
     }
 }

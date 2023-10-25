@@ -22,6 +22,7 @@ public class FpsCounter : MonoBehaviour
 
     private void Start()
     {
+        OnValidate();
         var possibleValues = Enumerable.Range(0, MaxFpsValue + 1);
         _possibleValues = possibleValues.Select(x => x.ToString()).ToArray();
     }
